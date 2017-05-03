@@ -15,17 +15,17 @@ export default class Container extends Component {
     super(props);
     this.state = {
       learningSpace: {
-         1 : { name: 'Easel Space', picture: '/images/easel.jpg', students: [], maxSize: 2},
-         2 : { name: 'Construction Space', picture: '/images/construction.jpg', students: [], maxSize: 6},
-         3 : { name: 'Dramatic Space', picture: '/images/dramatic.jpg', students: [], maxSize: 5},
-         4 : { name: 'Chess Space', picture: '/images/chess.jpg', students: [], maxSize: 3},
-         5 : { name: 'Dark Room Space', picture: '/images/darkroom.jpg', students: [], maxSize: 4},
-         6 : { name: 'Dream Time Space', picture: '/images/dreamtime.jpg', students: []},
-         7 : { name: 'Maths Space', picture: '/images/maths.jpg', students: []},
-         8 : { name: 'Nature Space', picture: '/images/nature.jpg', students: []},
-         9 : { name: 'Communication Space', picture: '/images/communication.jpg', students: []},
-         10 : { name: 'Puzzle Space', picture: '/images/puzzle.jpg', students: []},
-         11 : { name: 'Studio Space', picture: '/images/studio.jpg', students: []},
+         1 : { name: 'Easel Space', picture: '/image/easel.jpg', students: [], maxSize: 2},
+         2 : { name: 'Construction Space', picture: '/image/construction.jpg', students: [], maxSize: 6},
+         3 : { name: 'Dramatic Space', picture: '/image/dramatic.jpg', students: [], maxSize: 5},
+         4 : { name: 'Chess Space', picture: '/image/chess.jpg', students: [], maxSize: 3},
+         5 : { name: 'Dark Room Space', picture: '/image/darkroom.jpg', students: [], maxSize: 4},
+         6 : { name: 'Dream Time Space', picture: '/image/dreamtime.jpg', students: []},
+         7 : { name: 'Maths Space', picture: '/image/maths.jpg', students: []},
+         8 : { name: 'Nature Space', picture: '/image/nature.jpg', students: []},
+         9 : { name: 'Communication Space', picture: '/image/communication.jpg', students: []},
+         10 : { name: 'Puzzle Space', picture: '/image/puzzle.jpg', students: []},
+         11 : { name: 'Studio Space', picture: '/image/studio.jpg', students: []},
 
       },
      student: {
