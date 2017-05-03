@@ -4,7 +4,6 @@ var path = require('path');
 module.exports = {
   entry: [
     'script!jquery/dist/jquery.min.js',
-    'script!foundation-sites/dist/foundation.min.js',
     './app/app.jsx'
   ],
   externals: {
@@ -14,17 +13,21 @@ module.exports = {
     new webpack.ProvidePlugin({
       '$': 'jquery',
       'jQuery': 'jquery'
-    })
+    }),
   ],
   output: {
-    path: __dirname,
-    filename: './public/bundle.js'
+    path: 'public',
+    filename: 'bundle.js',
+    publicPath: '/'
   },
   resolve: {
     root: __dirname,
-    alias: {
-      applicationStyles: 'app/styles/app.scss'
-    },
+    modulesDirectories: [
+      'node_modules',
+      './app/components',
+      './app/api',
+      './app/css'
+    ],
     extensions: ['', '.js', '.jsx']
   },
   module: {
@@ -32,16 +35,12 @@ module.exports = {
       {
         loader: 'babel-loader',
         query: {
-          presets: ['react', 'es2015', 'stage-0']
+          presets: ['react', 'es2015', 'stage-0'],
+          plugins: ['transform-decorators-legacy' ],
         },
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/
       }
-    ]
-  },
-  sassLoader: {
-    includePaths: [
-      path.resolve(__dirname, './node_modules/foundation-sites/scss')
     ]
   },
   devtool: 'cheap-module-eval-source-map'

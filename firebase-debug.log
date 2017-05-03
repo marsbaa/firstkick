@@ -1,0 +1,100 @@
+[debug] ----------------------------------------------------------------------
+[debug] Command:      /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] CLI Version:  3.4.0
+[debug] Platform:     darwin
+[debug] Node Version: v6.7.0
+[debug] Time:         Wed Mar 29 2017 23:02:01 GMT+1100 (AEDT)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[debug] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/wpps-eb889  
+ Wed Mar 29 2017 23:02:01 GMT+1100 (AEDT)
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/wpps-eb889/tokens  
+ Wed Mar 29 2017 23:02:02 GMT+1100 (AEDT)
+[debug] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'wpps-eb889'...
+[info] 
+[info] i  deploying database, hosting
+[info] ✔  database: rules ready to deploy.
+[info] i  hosting: preparing public directory for upload...
+[debug] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/wpps-eb889/uploads/-KgOwQxaReAA7MF3O1Gd?fileCount=15&message=  
+ Wed Mar 29 2017 23:02:07 GMT+1100 (AEDT)
+[debug] ----------------------------------------------------------------------
+[debug] Command:      /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] CLI Version:  3.4.0
+[debug] Platform:     darwin
+[debug] Node Version: v6.7.0
+[debug] Time:         Wed Mar 29 2017 23:05:50 GMT+1100 (AEDT)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[debug] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/wpps-eb889  
+ Wed Mar 29 2017 23:05:50 GMT+1100 (AEDT)
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/wpps-eb889/tokens  
+ Wed Mar 29 2017 23:05:57 GMT+1100 (AEDT)
+[debug] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'wpps-eb889'...
+[info] 
+[info] i  deploying database, hosting
+[info] ✔  database: rules ready to deploy.
+[info] i  hosting: preparing public directory for upload...
+[debug] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/wpps-eb889/uploads/-KgOxKXmklI4KsYOS13_?fileCount=15&message=  
+ Wed Mar 29 2017 23:06:03 GMT+1100 (AEDT)
+[debug] ----------------------------------------------------------------------
+[debug] Command:      /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] CLI Version:  3.5.0
+[debug] Platform:     darwin
+[debug] Node Version: v6.7.0
+[debug] Time:         Wed Mar 29 2017 23:13:52 GMT+1100 (AEDT)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[debug] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/wpps-eb889  
+ Wed Mar 29 2017 23:13:52 GMT+1100 (AEDT)
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/wpps-eb889/tokens  
+ Wed Mar 29 2017 23:13:53 GMT+1100 (AEDT)
+[debug] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'wpps-eb889'...
+[info] 
+[info] i  deploying database, hosting
+[info] ✔  database: rules ready to deploy.
+[info] i  hosting: preparing public directory for upload...
+[debug] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/wpps-eb889/uploads/-KgOz8fROp9ZmCGvZHsW?fileCount=15&message=  
+ Wed Mar 29 2017 23:13:59 GMT+1100 (AEDT)
+[debug] ----------------------------------------------------------------------
+[debug] Command:      /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] CLI Version:  3.5.0
+[debug] Platform:     darwin
+[debug] Node Version: v6.7.0
+[debug] Time:         Thu Mar 30 2017 10:27:38 GMT+1100 (AEDT)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[debug] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/VOb3WlMbhgXnnwkXJB1HzUHlgyOVFdoYGDoixdE_QnY',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Thu Mar 30 2017 10:27:39 GMT+1100 (AEDT)
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/wpps-eb889  
+ Thu Mar 30 2017 10:27:39 GMT+1100 (AEDT)
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/wpps-eb889/tokens  
+ Thu Mar 30 2017 10:27:41 GMT+1100 (AEDT)
+[debug] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'wpps-eb889'...
+[info] 
+[info] i  deploying database, hosting
+[info] ✔  database: rules ready to deploy.
+[info] i  hosting: preparing public directory for upload...
+[debug] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/wpps-eb889/uploads/-KgROMfysVsIuMA66Z-9?fileCount=15&message=  
+ Thu Mar 30 2017 10:27:46 GMT+1100 (AEDT)
