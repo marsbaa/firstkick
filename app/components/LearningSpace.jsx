@@ -60,10 +60,10 @@ export default class LearningSpace extends Component {
     return connectDropTarget(
       <div style={{...style, opacity, backgroundImage: `url(${picture})`, height: '220px', padding: '0px'}}>
         <Row style={{height: '50px', backgroundColor: '#6AD9D9', borderRadius:'10px 10px 0px 0px', margin: '0px 0px'}}>
-        <Col xs={8} style={{margin: '0px', paddingTop: '10px'}}>
+        <Col xs={9} style={{margin: '0px', paddingTop: '10px'}}>
           <b>{name}</b>
         </Col>
-        <Col xs={4} style={{margin: '0px', paddingTop: '10px'}}>
+        <Col xs={3} style={{margin: '0px', paddingTop: '10px'}}>
           <b>{_.size(students)}/{maxSize}</b>
         </Col>
       </Row>

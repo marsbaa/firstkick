@@ -93,19 +93,21 @@ export default class Container extends Component {
       }
     };
     const {learningSpace, student} = this.state;
-
+    var dropStudent = 0
 
     return (
-      <div style={{backgroundColor: '#ECDFCD'}}>
+      <div style={{backgroundImage: 'url(' + 'image/space.jpg' + ')',
+            overflow: 'hidden', backgroundRepeat: 'repeat'}}>
         <Row style={{backgroundColor: '#F6454F', textAlign: 'center', color: 'white'}}>
           <Col lg={12} md={12} xs={12}>
             <h4>Learning Agreement</h4>
           </Col>
         </Row>
-          <Row style={{padding: '10px', overflow: 'hidden', clear: 'both', margin: '0px'}}>
+          <Row style={{padding: '5px', overflow: 'hidden', clear: 'both', margin: '0px'}}>
             <Col md={9} lg={9} xs={9}>
           {Object.keys(learningSpace).map((key) => {
             const {name, picture, students, maxSize} = learningSpace[key];
+            dropStudent += _.size(students)
             return (
                 <LearningSpace
                   key={key}
@@ -119,8 +121,16 @@ export default class Container extends Component {
           })
           }
           </Col>
-            <Col md={3} lg={3} xs={3}>
-              <Well style={{ overflow: 'hidden',  backgroundColor: '#54B77E' }}>
+            <Col md={3} lg={3} xs={3} style={{backgroundColor: '#54B77E', borderRadius: '10px', padding: '0'}}>
+              <Row style={{height: '50px', backgroundColor: '#6AD9D9', borderRadius:'10px 10px 0px 0px', margin: '0px 0px', padding: '0'}}>
+                <Col xs={9} style={{margin: '0px', paddingTop: '10px'}}>
+                  <b>Students</b>
+                </Col>
+                <Col xs={3} style={{margin: '0px', paddingTop: '10px'}}>
+                  <b>{_.size(this.state.student)-dropStudent}/{_.size(this.state.student)}</b>
+                </Col>
+                </Row>
+              <div style={{padding: '20px 25px', overflow:'hidden'}}>
                 {Object.keys(student).map((key)=> {
                   const {name, dropped} = student[key];
                   if(!dropped) {
@@ -133,7 +143,8 @@ export default class Container extends Component {
                     )
                   }
                 })}
-              </Well>
+              </div>
+
             </Col>
           </Row>
       </div>
