@@ -20,12 +20,12 @@ export default class Container extends Component {
          3 : { name: 'Dramatic Space', picture: '/image/dramatic.jpg', students: [], maxSize: 5},
          4 : { name: 'Chess Space', picture: '/image/chess.jpg', students: [], maxSize: 3},
          5 : { name: 'Dark Room Space', picture: '/image/darkroom.jpg', students: [], maxSize: 4},
-         6 : { name: 'Dream Time Space', picture: '/image/dreamtime.jpg', students: []},
-         7 : { name: 'Maths Space', picture: '/image/maths.jpg', students: []},
-         8 : { name: 'Nature Space', picture: '/image/nature.jpg', students: []},
-         9 : { name: 'Communication Space', picture: '/image/communication.jpg', students: []},
-         10 : { name: 'Puzzle Space', picture: '/image/puzzle.jpg', students: []},
-         11 : { name: 'Studio Space', picture: '/image/studio.jpg', students: []},
+         6 : { name: 'Dream Time Space', picture: '/image/dreamtime.jpg', students: [], maxSize: 3},
+         7 : { name: 'Maths Space', picture: '/image/maths.jpg', students: [], maxSize: 6},
+         8 : { name: 'Nature Space', picture: '/image/nature.jpg', students: [], maxSize: 6},
+         9 : { name: 'Communication Space', picture: '/image/communication.jpg', students: [], maxSize: 8},
+         10 : { name: 'Puzzle Space', picture: '/image/puzzle.jpg', students: [], maxSize: 2},
+         11 : { name: 'Studio Space', picture: '/image/studio.jpg', students: [], maxSize: 12},
 
       },
      student: {
@@ -102,16 +102,17 @@ export default class Container extends Component {
             <h5>Learning Agreement</h5>
           </Col>
         </Row>
-          <Row style={{padding: '5px', overflow: 'hidden', clear: 'both'}}>
+          <Row style={{padding: '10px', overflow: 'hidden', clear: 'both', margin: '0px'}}>
             <Col md={9} lg={9} xs={9}>
           {Object.keys(learningSpace).map((key) => {
-            const {name, picture, students} = learningSpace[key];
+            const {name, picture, students, maxSize} = learningSpace[key];
             return (
                 <LearningSpace
                   key={key}
                   name={name}
                   picture={picture}
                   students={students}
+                  maxSize={maxSize}
                   onDrop={item => this.handleDrop(key, item)}
                   />
             )

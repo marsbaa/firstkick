@@ -7,11 +7,11 @@ const style = {
   border: '1px solid gray',
   backgroundColor: 'white',
   padding: '0.2rem 0.5rem',
-  marginRight: '1.2rem',
-  marginBottom: '1.2rem',
+  marginRight: '0.4rem',
+  marginBottom: '0.4rem',
   cursor: 'move',
   float: 'left',
-  width: '7rem',
+  width: '8rem',
   textAlign: 'center',
   fontSize: '12px'
 };

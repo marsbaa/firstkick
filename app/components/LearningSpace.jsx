@@ -1,15 +1,15 @@
 import React, { PropTypes, Component } from 'react';
 import { DropTarget } from 'react-dnd';
 import ItemTypes from './ItemTypes';
-import {Well} from 'react-bootstrap'
+import {Well,Row,Col} from 'react-bootstrap'
 import Student from 'Student'
 import _ from 'lodash'
 
 const style = {
-  width: '22rem',
+  width: '25rem',
   marginRight: '1rem',
   marginBottom: '1rem',
-  color: 'green',
+  color: 'black',
   padding: '1rem',
   textAlign: 'center',
   fontSize: '1rem',
@@ -19,6 +19,9 @@ const style = {
 };
 
 const studentTarget = {
+    canDrop(props) {
+      return _.size(props.students) < props.maxSize
+    },
     drop(props, monitor) {
     props.onDrop(monitor.getItem());
     return {name: props.name}
@@ -38,11 +41,12 @@ export default class LearningSpace extends Component {
     name: PropTypes.string.isRequired,
     picture: PropTypes.string,
     onDrop: PropTypes.func.isRequired,
-    students: PropTypes.array.isRequired
+    students: PropTypes.array.isRequired,
+    maxSize: PropTypes.number.isRequired
   };
 
   render() {
-    const { canDrop, isOver, connectDropTarget, name, picture, students} = this.props;
+    const { canDrop, isOver, connectDropTarget, name, picture, students, maxSize} = this.props;
     const isActive = canDrop && isOver;
 
     let opacity: '1';
@@ -54,6 +58,12 @@ export default class LearningSpace extends Component {
 
     return connectDropTarget(
       <div style={{...style, opacity}}>
+        <Col xs={8} style={{margin: '0px'}}>
+          <b>{name}</b>
+        </Col>
+        <Col xs={4} style={{margin: '0px'}}>
+          <b>{_.size(students)}/{maxSize}</b>
+        </Col>
         <img src={picture} style={{width: '100%'}} />
         <div style={{height: '40px', marginTop: '15px'}}>
           {_.size(students)!== 0 ?
