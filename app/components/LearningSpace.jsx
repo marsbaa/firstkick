@@ -6,16 +6,17 @@ import Student from 'Student'
 import _ from 'lodash'
 
 const style = {
-  width: '25rem',
+  width: '27rem',
   marginRight: '1rem',
   marginBottom: '1rem',
   color: 'black',
   padding: '1rem',
   textAlign: 'center',
-  fontSize: '1rem',
+  fontSize: '1.5rem',
   float: 'right',
   lineHeight: 'normal',
   border: '1px dotted',
+  borderRadius: '10px'
 };
 
 const studentTarget = {
@@ -51,27 +52,28 @@ export default class LearningSpace extends Component {
 
     let opacity: '1';
     if (isActive) {
-      opacity = '0.6';
+      opacity = '0.2';
     } else if (canDrop) {
       opacity = '1';
     }
 
     return connectDropTarget(
-      <div style={{...style, opacity}}>
-        <Col xs={8} style={{margin: '0px'}}>
+      <div style={{...style, opacity, backgroundImage: `url(${picture})`, height: '220px', padding: '0px'}}>
+        <Row style={{height: '50px', backgroundColor: '#6AD9D9', borderRadius:'10px 10px 0px 0px', margin: '0px 0px'}}>
+        <Col xs={8} style={{margin: '0px', paddingTop: '10px'}}>
           <b>{name}</b>
         </Col>
-        <Col xs={4} style={{margin: '0px'}}>
+        <Col xs={4} style={{margin: '0px', paddingTop: '10px'}}>
           <b>{_.size(students)}/{maxSize}</b>
         </Col>
-        <img src={picture} style={{width: '100%'}} />
+      </Row>
         <div style={{height: '40px', marginTop: '15px'}}>
           {_.size(students)!== 0 ?
             (Object.keys(students).map((key) => {
               const {name, id} = students[key];
               return (<Student key={id} name={name} id={id}/>)
             }))
-            : "Drop Here"
+            : ""
           }
         </div>
       </div>

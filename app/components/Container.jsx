@@ -18,7 +18,7 @@ export default class Container extends Component {
          1 : { name: 'Easel Space', picture: '/image/easel.jpg', students: [], maxSize: 2},
          2 : { name: 'Construction Space', picture: '/image/construction.jpg', students: [], maxSize: 6},
          3 : { name: 'Dramatic Space', picture: '/image/dramatic.jpg', students: [], maxSize: 5},
-         4 : { name: 'Chess Space', picture: '/image/chess.jpg', students: [], maxSize: 3},
+         4 : { name: 'Chess Space', picture: '/image/chess.jpg', students: [], maxSize: 2},
          5 : { name: 'Dark Room Space', picture: '/image/darkroom.jpg', students: [], maxSize: 4},
          6 : { name: 'Dream Time Space', picture: '/image/dreamtime.jpg', students: [], maxSize: 3},
          7 : { name: 'Maths Space', picture: '/image/maths.jpg', students: [], maxSize: 6},
@@ -96,10 +96,10 @@ export default class Container extends Component {
 
 
     return (
-      <div>
-        <Row style={{backgroundColor: 'pink', textAlign: 'center'}}>
+      <div style={{backgroundColor: '#ECDFCD'}}>
+        <Row style={{backgroundColor: '#F6454F', textAlign: 'center', color: 'white'}}>
           <Col lg={12} md={12} xs={12}>
-            <h5>Learning Agreement</h5>
+            <h4>Learning Agreement</h4>
           </Col>
         </Row>
           <Row style={{padding: '10px', overflow: 'hidden', clear: 'both', margin: '0px'}}>
@@ -120,7 +120,7 @@ export default class Container extends Component {
           }
           </Col>
             <Col md={3} lg={3} xs={3}>
-              <Well style={{ overflow: 'hidden', clear: 'both' }}>
+              <Well style={{ overflow: 'hidden',  backgroundColor: '#54B77E' }}>
                 {Object.keys(student).map((key)=> {
                   const {name, dropped} = student[key];
                   if(!dropped) {

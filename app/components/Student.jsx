@@ -4,10 +4,11 @@ import ItemTypes from 'ItemTypes';
 import Wad from 'web-audio-daw'
 
 const style = {
-  border: '1px solid gray',
-  backgroundColor: 'white',
+  border: '3px solid black',
+  borderRadius: '10px',
+  backgroundColor: '#FFD503',
   padding: '0.2rem 0.5rem',
-  marginRight: '0.4rem',
+  marginRight: '0.5rem',
   marginBottom: '0.4rem',
   cursor: 'move',
   float: 'left',
