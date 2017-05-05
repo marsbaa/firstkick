@@ -121,9 +121,10 @@ export default class Container extends Component {
           })
           }
           </Col>
-            <Col md={3} lg={3} xs={3} style={{backgroundColor: '#54B77E', borderRadius: '10px', padding: '0'}}>
-              <Row style={{height: '50px', backgroundColor: '#6AD9D9', borderRadius:'10px 10px 0px 0px', margin: '0px 0px', padding: '0'}}>
-                <Col xs={9} style={{margin: '0px', paddingTop: '10px'}}>
+            <Col md={3} lg={3} xs={3} style={{ borderRadius: '10px', padding: '0', border: '2px solid black'}}>
+              <Row style={{height: '35px', backgroundColor: '#6AD9D9', borderRadius:'10px 10px 0px 0px', margin: '0px 0px', padding: '0'}}>
+                <Col xs={1}></Col>
+                <Col xs={8} style={{margin: '0px', paddingTop: '10px'}}>
                   <b>Students</b>
                 </Col>
                 <Col xs={3} style={{margin: '0px', paddingTop: '10px'}}>
