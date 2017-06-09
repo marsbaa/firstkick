@@ -1,190 +1,210 @@
 import React, { Component } from 'react';
 import { DragDropContext } from 'react-dnd';
+import MultiBackend, { TouchTransition } from 'react-dnd-multi-backend';
 import HTML5Backend from 'react-dnd-html5-backend';
-import LearningSpace from 'LearningSpace';
+import TouchBackend from 'react-dnd-touch-backend';
+import LearningSpaceSelector from 'LearningSpaceSelector';
 import Student from 'Student';
-import {Grid, Row, Col, Well} from 'react-bootstrap'
+import {
+  Grid,
+  Row,
+  Col,
+  Glyphicon,
+  Well,
+  DropdownButton,
+  MenuItem,
+  ButtonToolbar
+} from 'react-bootstrap';
+var actions = require('actions');
+import { connect } from 'react-redux';
 import update from 'react/lib/update';
-import _ from 'lodash'
-import Speech from 'react-speech'
-import Wad from 'web-audio-daw'
+import Speech from 'react-speech';
+import Wad from 'web-audio-daw';
+import { sHeader } from 'styles.css';
+import firebase from 'app/firebase';
+import {
+  startStudents,
+  startLearningSpaces,
+  startLearningAgreements,
+  addLearningAgreement,
+  removeLearningAgreement
+} from 'actions';
+import isEmpty from 'lodash/isEmpty';
+import find from 'lodash/find';
+import filter from 'lodash/filter';
+import size from 'lodash/size';
+import moment from 'moment';
+import styled from 'styled-components';
 
-@DragDropContext(HTML5Backend)
-export default class Container extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      learningSpace: {
-         1 : { name: 'Easel Space', picture: '/image/easel.jpg', students: [], maxSize: 2},
-         2 : { name: 'Construction Space', picture: '/image/construction.jpg', students: [], maxSize: 6},
-         3 : { name: 'Dramatic Space', picture: '/image/dramatic.jpg', students: [], maxSize: 5},
-         4 : { name: 'Chess Space', picture: '/image/chess.jpg', students: [], maxSize: 2},
-         5 : { name: 'Dark Room Space', picture: '/image/darkroom.jpg', students: [], maxSize: 4},
-         6 : { name: 'Dream Time Space', picture: '/image/dreamtime.jpg', students: [], maxSize: 3},
-         7 : { name: 'Maths Space', picture: '/image/maths.jpg', students: [], maxSize: 6},
-         8 : { name: 'Nature Space', picture: '/image/nature.jpg', students: [], maxSize: 6},
-         9 : { name: 'Communication Space', picture: '/image/communication.jpg', students: [], maxSize: 8},
-         10 : { name: 'Puzzle Space', picture: '/image/puzzle.jpg', students: [], maxSize: 2},
-         11 : { name: 'Studio Space', picture: '/image/studio.jpg', students: [], maxSize: 12},
+const HTML5toTouch = {
+  backends: [
+    {
+      backend: HTML5Backend
+    },
+    {
+      backend: TouchBackend({ enableMouseEvents: true }), // Note that you can call your backends with options
+      preview: true,
+      transition: TouchTransition
+    }
+  ]
+};
 
-      },
-     student: {
-       1: {name: 'Aco'},
-       2: {name: 'Ashton'},
-       3: {name: 'Bailey'},
-       4: {name: 'Ben'},
-       5: {name: 'Blaire'},
-       6: {name: 'Blaize'},
-       7: {name: 'County'},
-       8: {name: 'Daniel(Irfan)'},
-       9: {name: 'Denzel'},
-       10: {name: 'Dimas'},
-       11: {name: 'Edin'},
-       12: {name: 'Elika'},
-       13: {name: 'Elisapeta'},
-       14: {name: 'Erhas'},
-       15: {name: 'Etash'},
-       16: {name: 'Faiza'},
-       17: {name: 'Hala(Lulu)'},
-       18: {name: 'Hannah'},
-       19: {name: 'Henri'},
-       20: {name: 'Hiba'},
-       21: {name: 'Huong'},
-       22: {name: 'Intizar'},
-       23: {name: 'Isaiah'},
-       24: {name: 'Jamaica'},
-       25: {name: 'Jasmine'},
-       26: {name: 'Jennita'},
-       27: {name: 'Kayla'},
-       28: {name: 'Liam'},
-       29: {name: 'Mackenzie'},
-       30: {name: 'Madison'},
-       31: {name: 'Maha'},
-       31: {name: 'Mobin'},
-       32: {name: 'Moein'},
-       33: {name: 'Murrsa'},
-       34: {name: 'Nathan'},
-       35: {name: 'Nehemiah'},
-       36: {name: 'Nesandi'},
-       37: {name: 'Nikola'},
-       38: {name: 'Samuel'},
-       39: {name: 'Sandali'},
-       40: {name: 'Setayesh'},
-       41: {name: 'Soman'},
-       42: {name: 'Zane'},
-       43: {name: 'Zeynep'},
-       44: {name: 'Zoha'}
-     }
+const SHeader = styled(Row)`
+  height: 35px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: white;
+  border-top-color: rgba(0,0,0,0.4);
+  padding: 10px 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  color: #656565;
+`;
+
+@DragDropContext(MultiBackend)
+class Container extends Component {
+  componentWillMount() {
+    const {
+      dispatch,
+      students,
+      learningSpaces,
+      learningAgreements
+    } = this.props;
+    if (isEmpty(students)) {
+      dispatch(startStudents());
+    }
+    if (isEmpty(learningSpaces)) {
+      dispatch(startLearningSpaces());
+    }
+    if (isEmpty(learningAgreements)) {
+      dispatch(startLearningAgreements());
     }
   }
+
+  constructor(props) {
+    super(props);
+    this.handleDropOutside = this.handleDropOutside.bind(this);
+  }
   render() {
-    let style = {
-      play: {
-        button: {
-          width: '28',
-          height: '28',
-          cursor: 'pointer',
-          pointerEvents: 'none',
-          outline: 'none',
-          backgroundColor: 'yellow',
-          border: 'solid 1px rgba(255,255,255,1)',
-          borderRadius: 6
-        },
+    const { learningSpaces, students, learningAgreements } = this.props;
+    let dropStudent = 0;
+    let filteredLA = filter(learningAgreements, o => {
+      if (o.date !== undefined) {
+        return moment().isSame(o.date, 'day');
       }
-    };
-    const {learningSpace, student} = this.state;
-    var dropStudent = 0
+    });
 
     return (
-      <div style={{backgroundImage: 'url(' + 'image/space.jpg' + ')',
-            overflow: 'hidden', backgroundRepeat: 'repeat'}}>
-        <Row style={{backgroundColor: '#F6454F', textAlign: 'center', color: 'white'}}>
-          <Col lg={12} md={12} xs={12}>
-            <h4>Learning Agreement</h4>
-          </Col>
-        </Row>
-          <Row style={{padding: '5px', overflow: 'hidden', clear: 'both', margin: '0px'}}>
-            <Col md={9} lg={9} xs={9}>
-          {Object.keys(learningSpace).map((key) => {
-            const {name, picture, students, maxSize} = learningSpace[key];
-            dropStudent += _.size(students)
-            return (
-                <LearningSpace
-                  key={key}
-                  name={name}
-                  picture={picture}
-                  students={students}
-                  maxSize={maxSize}
-                  onDrop={item => this.handleDrop(key, item)}
+      <div style={{ margin: '20px 40px 40px 20px' }}>
+        <Row>
+          <Col md={9} lg={9} xs={9}>
+            <SHeader>
+              {Object.keys(learningSpaces).map(id => {
+                const {
+                  key,
+                  name,
+                  pictureURL,
+                  badgeURL,
+                  maxGroupSize
+                } = learningSpaces[id];
+                const laStudents = filter(filteredLA, {
+                  learningSpaceKey: key
+                });
+                dropStudent += _.size(laStudents);
+                return (
+                  <LearningSpaceSelector
+                    key={key}
+                    name={name}
+                    picture={pictureURL}
+                    badge={badgeURL}
+                    students={laStudents}
+                    maxSize={parseInt(maxGroupSize)}
+                    onDrop={item => this.handleDrop(key, item)}
+                    moveStudent={item => {
+                      this.handleDropOutside(item);
+                    }}
                   />
-            )
-          })
-          }
+                );
+              })}
+            </SHeader>
+
           </Col>
-            <Col md={3} lg={3} xs={3} style={{ borderRadius: '10px', padding: '0', border: '2px solid black'}}>
-              <Row style={{height: '35px', backgroundColor: '#6AD9D9', borderRadius:'10px 10px 0px 0px', margin: '0px 0px', padding: '0'}}>
-                <Col xs={1}></Col>
-                <Col xs={8} style={{margin: '0px', paddingTop: '10px'}}>
-                  <b>Students</b>
-                </Col>
-                <Col xs={3} style={{margin: '0px', paddingTop: '10px'}}>
-                  <b>{_.size(this.state.student)-dropStudent}/{_.size(this.state.student)}</b>
-                </Col>
-                </Row>
-              <div style={{padding: '20px 25px', overflow:'hidden'}}>
-                {Object.keys(student).map((key)=> {
-                  const {name, dropped} = student[key];
-                  if(!dropped) {
+          <Col xs={3}>
+            <SHeader>
+              <Col xs={6}>
+                <b>Students</b>
+              </Col>
+              <Col xs={6}>
+                <b style={{ float: 'right' }}>
+                  {size(students) - dropStudent}
+                  /
+                  {size(students)}
+                </b>
+              </Col>
+            </SHeader>
+            <Row style={{ padding: '10px 10px 10px 35px' }}>
+              <Col xs={12}>
+                {Object.keys(students).map(key => {
+                  const { name } = students[key];
+                  const dropped = find(filteredLA, { studentKey: key });
+                  if (dropped === undefined) {
                     return (
                       <Student
                         key={key}
                         name={name}
                         id={key}
-                        />
-                    )
+                        moveStudent={() => {
+                          this.handleDropOutside(key);
+                        }}
+                      />
+                    );
                   }
                 })}
-              </div>
+              </Col>
 
-            </Col>
-          </Row>
+            </Row>
+          </Col>
+        </Row>
       </div>
-
     );
   }
-
-  handleDrop(index, item) {
-    const {id} = item;
-    var spaceIndex = -1;
-    Object.keys(this.state.learningSpace).map((spaceId) => {
-      var space = this.state.learningSpace[spaceId]
-      spaceIndex = _.findIndex(space.students, {'id' : id})
-      if (spaceIndex > -1) {
-        this.setState(update(this.state, {
-          learningSpace: {
-            [spaceId]: {
-              students: {
-                $splice: [[spaceIndex, 1]],
-              }
-            }
-          }
-    }))
+  handleDropOutside(key) {
+    const { dispatch, learningAgreements } = this.props;
+    let filteredLA = filter(learningAgreements, o => {
+      return moment().isSame(o.date, 'day');
+    });
+    const la = find(filteredLA, { studentKey: key });
+    if (la !== undefined) {
+      dispatch(removeLearningAgreement(la.key));
+    }
   }
-})
-      this.setState(update(this.state, {
-        learningSpace: {
-          [index]: {
-            students: {
-              $push: [item],
-            },
-          },
-        },
-        student: {
-          [id] : {
-            dropped: {$set : true}
-          }
-        }
-      }));
 
+  handleDrop(key, item) {
+    const { dispatch, learningAgreements } = this.props;
+    const learningAgreement = {
+      date: moment().format(),
+      name: item.name,
+      studentKey: item.id,
+      learningSpaceKey: key
+    };
+    let filteredLA = filter(learningAgreements, o => {
+      return moment().isSame(o.date, 'day');
+    });
+    const exist = find(filteredLA, { studentKey: item.id });
+    if (exist !== undefined) {
+      dispatch(addLearningAgreement(learningAgreement, exist.key));
+    } else {
+      dispatch(addLearningAgreement(learningAgreement, null));
+    }
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    learningSpaces: state.learningSpaces,
+    students: state.students,
+    learningAgreements: state.learningAgreements
+  };
+}
+
+export default connect(mapStateToProps)(Container);

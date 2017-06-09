@@ -1,14 +1,29 @@
-import {createStore, applyMiddleware, combineReducers} from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import {composeWithDevTools} from 'redux-devtools-extension/logOnlyInProduction'
-var {learningSpaceReducer} = require('reducers');
+import {
+  composeWithDevTools
+} from 'redux-devtools-extension/logOnlyInProduction';
+import { reducer as formReducer } from 'redux-form';
+var {
+  learningSpaceReducer,
+  fetchingReducer,
+  studentReducer,
+  learningAgreementReducer
+} = require('reducers');
 
 export var configure = (initialState = {}) => {
   var reducer = combineReducers({
-    learningSpace: learningSpaceReducer});
-    var store = createStore(reducer, initialState, composeWithDevTools(
-      applyMiddleware(thunk)
-    ));
+    learningSpaces: learningSpaceReducer,
+    students: studentReducer,
+    isFetching: fetchingReducer,
+    learningAgreements: learningAgreementReducer,
+    form: formReducer
+  });
+  var store = createStore(
+    reducer,
+    initialState,
+    composeWithDevTools(applyMiddleware(thunk))
+  );
 
-    return store;
-  };
+  return store;
+};

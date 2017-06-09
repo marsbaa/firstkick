@@ -1,0 +1,44 @@
+.laBox {
+  width: 260px;
+  color: black;
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: normal;
+  height: 180px;
+  padding: 0px;
+  margin: 5px 15px 35px 15px;
+  box-shadow: 2px 2px 2px 2px#888888;
+  float: left;
+}
+
+.laHeader {
+  height: 35px;
+  background-color: none;
+  color: white;
+  margin: 0px 0px;
+}
+
+.laFooter {
+  height: 35px;
+  background-color: white;
+  margin-top: 110px;
+  margin-left: 0px;
+  margin-right: 0px;
+  box-shadow: 2px 2px 2px 2px #888888;
+}
+
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+
+&.active {
+  background: #c94e50;
+  color: #fffce1;
+}
