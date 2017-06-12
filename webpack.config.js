@@ -6,23 +6,11 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 try {
   envFile(path.join(__dirname, 'config/' + process.env.NODE_ENV + '.env'));
-} catch (e) {
-
-}
+} catch (e) {}
 
 module.exports = {
-  entry: [
-    'script!jquery/dist/jquery.min.js',
-    './app/app.jsx'
-  ],
-  externals: {
-    jquery: 'jQuery'
-  },
+  entry: ['./app/app.jsx'],
   plugins: [
-    new webpack.ProvidePlugin({
-      '$': 'jquery',
-      'jQuery': 'jquery'
-    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
@@ -60,7 +48,7 @@ module.exports = {
         loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015', 'stage-0'],
-          plugins: ['transform-decorators-legacy' ],
+          plugins: ['transform-decorators-legacy']
         },
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/
@@ -68,7 +56,8 @@ module.exports = {
       {
         test: /\.css$/,
         loader: 'style-loader'
-      }, {
+      },
+      {
         test: /\.css$/,
         loader: 'css-loader'
       }

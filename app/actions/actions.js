@@ -123,6 +123,171 @@ export const addLearningSpace = (learningSpace, pictureFile, badgeFile) => {
   };
 };
 
+export const updateLearningSpace = (
+  key,
+  learningSpace,
+  pictureFile,
+  badgeFile
+) => {
+  return dispatch => {
+    var lsRef = firebaseRef.child('learningSpace');
+    var updates = {};
+    if (pictureFile === '' && badgeFile === '') {
+      updates[key] = {
+        ...learningSpace
+      };
+      lsRef.update(updates);
+      dispatch({
+        type: 'UPDATE_LEARNING_SPACE',
+        learningSpace
+      });
+    } else if (pictureFile !== '' && badgeFile === '') {
+      var storageRef = firebase.storage().ref();
+      var uploadTask = storageRef
+        .child('images/' + learningSpace.pictureFilename)
+        .put(pictureFile);
+      uploadTask.on(
+        'state_changed',
+        function(snapshot) {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          var progress = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED: // or 'paused'
+              console.log('Upload is paused');
+              break;
+            case firebase.storage.TaskState.RUNNING: // or 'running'
+              console.log('Upload is running');
+              break;
+          }
+        },
+        function(error) {
+          // Handle unsuccessful uploads
+        },
+        function() {
+          var pictureURL = uploadTask.snapshot.downloadURL;
+          updates[key] = {
+            ...learningSpace,
+            pictureURL
+          };
+          lsRef.update(updates);
+          learningSpace.pictureURL = pictureURL;
+          dispatch({
+            type: 'UPDATE_LEARNING_SPACE',
+            learningSpace
+          });
+        }
+      );
+    } else if (pictureFile === '' && badgeFile !== '') {
+      var storageRef = firebase.storage().ref();
+      uploadTask = storageRef
+        .child('images/' + learningSpace.badgeFilename)
+        .put(badgeFile);
+      uploadTask.on(
+        'state_changed',
+        function(snapshot) {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          var progress = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED: // or 'paused'
+              console.log('Upload is paused');
+              break;
+            case firebase.storage.TaskState.RUNNING: // or 'running'
+              console.log('Upload is running');
+              break;
+          }
+        },
+        function(error) {
+          // Handle unsuccessful uploads
+        },
+        function() {
+          var badgeURL = uploadTask.snapshot.downloadURL;
+          updates[key] = {
+            ...learningSpace,
+            badgeURL
+          };
+          lsRef.update(updates);
+          learningSpace.badgeURL = badgeURL;
+          dispatch({
+            type: 'UPDATE_LEARNING_SPACE',
+            learningSpace
+          });
+        }
+      );
+    } else {
+      var storageRef = firebase.storage().ref();
+      var uploadTask = storageRef
+        .child('images/' + learningSpace.pictureFilename)
+        .put(pictureFile);
+      uploadTask.on(
+        'state_changed',
+        function(snapshot) {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          var progress = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED: // or 'paused'
+              console.log('Upload is paused');
+              break;
+            case firebase.storage.TaskState.RUNNING: // or 'running'
+              console.log('Upload is running');
+              break;
+          }
+        },
+        function(error) {
+          // Handle unsuccessful uploads
+        },
+        function() {
+          var pictureURL = uploadTask.snapshot.downloadURL;
+          uploadTask = storageRef
+            .child('images/' + learningSpace.badgeFilename)
+            .put(badgeFile);
+          uploadTask.on(
+            'state_changed',
+            function(snapshot) {
+              // Observe state change events such as progress, pause, and resume
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              var progress =
+                snapshot.bytesTransferred / snapshot.totalBytes * 100;
+              console.log('Upload is ' + progress + '% done');
+              switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED: // or 'paused'
+                  console.log('Upload is paused');
+                  break;
+                case firebase.storage.TaskState.RUNNING: // or 'running'
+                  console.log('Upload is running');
+                  break;
+              }
+            },
+            function(error) {
+              // Handle unsuccessful uploads
+            },
+            function() {
+              var badgeURL = uploadTask.snapshot.downloadURL;
+              updates[key] = {
+                ...learningSpace,
+                pictureURL,
+                badgeURL
+              };
+              lsRef.update(updates);
+              learningSpace.pictureURL = pictureURL;
+              learningSpace.badgeURL = badgeURL;
+              dispatch({
+                type: 'UPDATE_LEARNING_SPACE',
+                learningSpace
+              });
+            }
+          );
+        }
+      );
+    }
+  };
+};
+
 //Actions for Learning Agreement
 
 export const startLearningAgreements = () => {
@@ -205,18 +370,48 @@ export const addStudents = students => {
   };
 };
 
-export const addStudent = student => {
-  const studentRef = firebaseRef.child('students');
-  const newKey = studentRef.push().key;
-  let updates = {};
-  updates[newKey] = {
-    ...student
-  };
-  studentRef.update(updates);
-  student.key = newKey;
-  return {
-    type: 'ADD_STUDENT',
-    student
+export const addStudent = (student, pictureFile) => {
+  return dispatch => {
+    const studentRef = firebaseRef.child('students');
+    const newKey = studentRef.push().key;
+    let updates = {};
+    var storageRef = firebase.storage().ref();
+    var uploadTask = storageRef
+      .child('images/' + student.pictureFilename)
+      .put(pictureFile);
+    uploadTask.on(
+      'state_changed',
+      function(snapshot) {
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        var progress = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED: // or 'paused'
+            console.log('Upload is paused');
+            break;
+          case firebase.storage.TaskState.RUNNING: // or 'running'
+            console.log('Upload is running');
+            break;
+        }
+      },
+      function(error) {
+        // Handle unsuccessful uploads
+      },
+      function() {
+        var pictureURL = uploadTask.snapshot.downloadURL;
+        updates[newKey] = {
+          ...student,
+          pictureURL
+        };
+        studentRef.update(updates);
+        student.key = newKey;
+        return {
+          type: 'ADD_STUDENT',
+          student
+        };
+      }
+    );
   };
 };
 

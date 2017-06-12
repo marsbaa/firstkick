@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { DropTarget } from 'react-dnd';
 import ItemTypes from './ItemTypes';
-import { Well, Row, Col } from 'react-bootstrap';
+import { Well, Row, Col, Badge } from 'react-bootstrap';
 import Student from 'Student';
 import _ from 'lodash';
 import { laBox, laFooter } from 'styles.css';
@@ -31,6 +31,7 @@ export default class LearningSpace extends Component {
     badge: PropTypes.string,
     onDrop: PropTypes.func.isRequired,
     students: PropTypes.array.isRequired,
+    learningAgreements: PropTypes.array.isRequired,
     maxSize: PropTypes.number.isRequired,
     moveStudent: PropTypes.func.isRequired
   };
@@ -44,6 +45,7 @@ export default class LearningSpace extends Component {
       picture,
       badge,
       students,
+      learningAgreements,
       maxSize,
       moveStudent
     } = this.props;
@@ -69,15 +71,21 @@ export default class LearningSpace extends Component {
           {_.size(students) !== 0
             ? Object.keys(students).map(key => {
                 const { name, studentKey } = students[key];
+                const count = _.size(
+                  _.filter(learningAgreements, { studentKey: studentKey })
+                );
                 return (
-                  <Student
-                    key={studentKey}
-                    name={name}
-                    id={studentKey}
-                    moveStudent={() => {
-                      moveStudent(studentKey);
-                    }}
-                  />
+                  <div>
+                    <Student
+                      key={studentKey}
+                      name={name}
+                      id={studentKey}
+                      count={count}
+                      moveStudent={() => {
+                        moveStudent(studentKey);
+                      }}
+                    />
+                  </div>
                 );
               })
             : ''}

@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import {
   Row,
   Col,
-  FieldGroup,
   Glyphicon,
   Badge,
   ButtonGroup,
@@ -12,7 +10,8 @@ import {
 } from 'react-bootstrap';
 import DeleteModal from 'DeleteModal';
 import FormModal from 'FormModal';
-import { laHeader } from 'styles.css';
+import EditFormModal from 'EditFormModal';
+import LearningSpace from 'LearningSpace';
 import styled from 'styled-components';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
@@ -95,18 +94,12 @@ class LearningSpaceForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pictureFile: '',
-      picturePreviewUrl: '',
-      badgeFile: '',
-      badgePreviewUrl: '',
-      earnBadge: '',
-      lsName: '',
-      maxgroupsize: '',
       name: '',
       key: '',
       showModal: false,
-      multiValue: [],
-      filter: 'current'
+      showEditModal: false,
+      filter: 'current',
+      learningSpace: {}
     };
     this.open = this.open.bind(this);
   }
@@ -116,21 +109,6 @@ class LearningSpaceForm extends Component {
     if (isEmpty(learningSpaces)) {
       dispatch(startLearningSpaces());
     }
-  }
-  handleEarnBadge(e) {
-    this.setState({ earnBadge: e.target.value });
-  }
-
-  handleChange(multiValue) {
-    this.setState({ multiValue });
-  }
-
-  handleNameChange(e) {
-    this.setState({ lsName: e.target.value });
-  }
-
-  handleMaxSizeChange(e) {
-    this.setState({ maxgroupsize: e.target.value });
   }
 
   open(name, key) {
@@ -143,34 +121,22 @@ class LearningSpaceForm extends Component {
   }
 
   close(e) {
-    e.preventDefault();
-    this.setState({ showModal: false });
+    this.setState({
+      showModal: false
+    });
   }
 
-  handleSubmit() {
-    var { dispatch } = this.props;
-    let tags = [];
-    Object.keys(this.state.multiValue).map(id => {
-      let tag = this.state.multiValue[id];
-      tags.push(tag.value);
+  closeE(e) {
+    this.setState({
+      showEditModal: false
     });
-    var learningSpace = {
-      name: this.state.lsName,
-      maxGroupSize: this.state.maxgroupsize,
-      pictureFilename: this.state.pictureFile.name,
-      badgeFilename: this.state.badgeFile.name,
-      earnBadge: this.state.earnBadge,
-      tags,
-      status: 'current'
-    };
-    dispatch(
-      addLearningSpace(
-        learningSpace,
-        this.state.pictureFile,
-        this.state.badgeFile
-      )
-    );
-    this.setState({ showModal: false });
+  }
+
+  editLearningSpace(learningSpace) {
+    this.setState({
+      showEditModal: true,
+      learningSpace
+    });
   }
 
   changeLearningSpaceStatus(key, status) {
@@ -178,42 +144,8 @@ class LearningSpaceForm extends Component {
     dispatch(learningSpaceStatus(key, status));
   }
 
-  handlePictureChange(e) {
-    e.preventDefault();
-    let reader = new FileReader();
-    let file = e.target.files[0];
-
-    reader.onloadend = () => {
-      this.setState({
-        pictureFile: file,
-        picturePreviewUrl: reader.result
-      });
-    };
-
-    reader.readAsDataURL(file);
-  }
-
-  handleBadgeChange(e) {
-    e.preventDefault();
-    let reader = new FileReader();
-    let file = e.target.files[0];
-
-    reader.onloadend = () => {
-      this.setState({
-        badgeFile: file,
-        badgePreviewUrl: reader.result
-      });
-    };
-
-    reader.readAsDataURL(file);
-  }
-
   render() {
     const { learningSpaces } = this.props;
-
-    let filteredLearningSpaces = filter(learningSpaces, {
-      status: this.state.filter
-    });
     let activeCurrent, activeArchived;
     if (this.state.filter === 'current') {
       activeCurrent = {
@@ -233,15 +165,13 @@ class LearningSpaceForm extends Component {
         <FormModal
           title="ADD LEARNING SPACE"
           show={this.state.showModal}
-          close={e => this.close.bind(this)}
-          handlePictureChange={this.handlePictureChange.bind(this)}
-          handleEarnBadge={this.handleEarnBadge.bind(this)}
-          handleBadgeChange={this.handleBadgeChange.bind(this)}
-          handleChange={this.handleChange.bind(this)}
-          handleNameChange={this.handleNameChange.bind(this)}
-          handleMaxSizeChange={this.handleMaxSizeChange.bind(this)}
-          handleSubmit={this.handleSubmit.bind(this)}
-          multiValue={this.state.multiValue}
+          close={this.close.bind(this)}
+        />
+        <EditFormModal
+          title="EDIT LEARNING SPACE"
+          show={this.state.showEditModal}
+          close={this.closeE.bind(this)}
+          learningSpace={this.state.learningSpace}
         />
 
         <Row style={{ textAlign: 'center', margin: '10px 20px' }}>
@@ -278,91 +208,20 @@ class LearningSpaceForm extends Component {
 
         <SHeader>
           <Col xs={12} md={12} lg={12}>
-            {Object.keys(filteredLearningSpaces).map(id => {
-              const {
-                key,
-                name,
-                pictureURL,
-                badgeURL,
-                students,
-                tags,
-                status,
-                maxGroupSize
-              } = filteredLearningSpaces[id];
-              return (
-                <div
-                  key={key}
-                  className="laBox"
-                  style={{
-                    backgroundImage: `url(${pictureURL})`
-                  }}
-                >
-                  <Row className="laHeader">
-                    <Col xs={7} md={7} lg={7}>
-                      {tags.map((tag, id) => {
-                        return (
-                          <Badge
-                            style={{
-                              marginTop: '7px',
-                              marginRight: '2px',
-                              float: 'left'
-                            }}
-                            key={id}
-                          >
-                            {tag}
-                          </Badge>
-                        );
-                      })}
-                    </Col>
-                    <Col xs={5} md={5} lg={5} style={{ marginTop: '3px' }}>
-                      <StyledButton
-                        onClick={() =>
-                          this.changeLearningSpaceStatus(key, status)}
-                      >
-                        <Glyphicon glyph="pencil" />
-                      </StyledButton>
-                      <StyledButton
-                        onClick={() =>
-                          this.changeLearningSpaceStatus(key, status)}
-                      >
-                        <Glyphicon glyph="transfer" />
-                      </StyledButton>
-                      {status === 'archived'
-                        ? <StyledButton
-                            onClick={() => this.open(name, key, status)}
-                          >
-                            <Glyphicon glyph="trash" />
-                          </StyledButton>
-                        : null}
-                    </Col>
-                  </Row>
-                  <Row className="laFooter">
-                    <Col xs={2} md={2} lg={2}>
-                      <img
-                        style={{ marginTop: '5px', width: '20px' }}
-                        src={badgeURL}
-                      />
-                    </Col>
-                    <Col
-                      xs={8}
-                      md={8}
-                      lg={8}
-                      style={{ margin: '0px', paddingTop: '10px' }}
-                    >
-                      <b>{name}</b>
-                    </Col>
-                    <Col
-                      xs={2}
-                      md={2}
-                      lg={2}
-                      style={{ margin: '0px', paddingTop: '10px' }}
-                    >
-                      <b>0/{maxGroupSize}</b>
-                    </Col>
-                  </Row>
-
-                </div>
-              );
+            {Object.keys(learningSpaces).map(id => {
+              if (this.state.filter === learningSpaces[id].status) {
+                return (
+                  <LearningSpace
+                    key={id}
+                    learningSpace={learningSpaces[id]}
+                    changeLearningSpaceStatus={this.changeLearningSpaceStatus.bind(
+                      this
+                    )}
+                    editLearningSpace={this.editLearningSpace.bind(this)}
+                    open={this.open.bind(this)}
+                  />
+                );
+              }
             })}
           </Col>
         </SHeader>

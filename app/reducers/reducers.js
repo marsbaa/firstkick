@@ -12,12 +12,24 @@ export var learningSpaceReducer = (state = {}, action) => {
           ...action.learningSpace
         }
       };
+    case 'UPDATE_LEARNING_SPACE':
+      return {
+        ...state,
+        [action.learningSpace.key]: {
+          ...action.learningSpace
+        }
+      };
     case 'REMOVE_LEARNING_SPACE':
       return omit(state, action.key);
     case 'CHANGE_LEARNING_SPACE_STATUS':
-      let ls = state;
-      ls[action.key].status = action.status;
-      return ls;
+      let ls = state[action.key];
+      return {
+        ...state,
+        [action.key]: {
+          ...ls,
+          status: action.status
+        }
+      };
     default:
       return state;
   }

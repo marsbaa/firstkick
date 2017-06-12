@@ -3,7 +3,7 @@ import { Modal, Button, Row, Col } from 'react-bootstrap';
 import { Creatable } from 'react-select';
 import 'react-select/dist/react-select.css';
 import styled from 'styled-components';
-import { addLearningSpace } from 'actions';
+import { addLearningSpace, updateLearningSpace } from 'actions';
 import { connect } from 'react-redux';
 
 const StyledButton = styled.a`
@@ -27,7 +27,7 @@ margin: 10px 10px;
   }
 `;
 
-class FormModal extends Component {
+class EditFormModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,6 +41,36 @@ class FormModal extends Component {
       multiValue: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.learningSpace !== undefined) {
+      const {
+        tags,
+        badgeURL,
+        pictureURL,
+        name,
+        maxGroupSize,
+        earnBadge
+      } = nextProps.learningSpace;
+      const multiValue = [];
+      if (tags !== undefined) {
+        tags.map(tag => {
+          multiValue.push({
+            value: tag,
+            label: tag
+          });
+        });
+      }
+      this.setState({
+        multiValue,
+        badgePreviewUrl: badgeURL,
+        picturePreviewUrl: pictureURL,
+        lsName: name,
+        maxgroupsize: maxGroupSize,
+        earnBadge: earnBadge
+      });
+    }
   }
 
   handleEarnBadge(e) {
@@ -97,16 +127,24 @@ class FormModal extends Component {
       tags.push(tag.value);
     });
     var learningSpace = {
+      key: this.props.learningSpace.key,
       name: this.state.lsName,
       maxGroupSize: this.state.maxgroupsize,
-      pictureFilename: this.state.pictureFile.name,
-      badgeFilename: this.state.badgeFile.name,
+      pictureFilename: this.state.pictureFile !== ''
+        ? this.state.pictureFile.name
+        : this.props.learningSpace.pictureFilename,
+      badgeFilename: this.state.badgeFile !== ''
+        ? this.state.badgeFile.name
+        : this.props.learningSpace.badgeFilename,
       earnBadge: this.state.earnBadge,
+      pictureURL: this.state.picturePreviewUrl,
+      badgeURL: this.state.badgePreviewUrl,
       tags,
-      status: 'current'
+      status: this.props.learningSpace.status
     };
     dispatch(
-      addLearningSpace(
+      updateLearningSpace(
+        this.props.learningSpace.key,
         learningSpace,
         this.state.pictureFile,
         this.state.badgeFile
@@ -117,7 +155,16 @@ class FormModal extends Component {
 
   render() {
     const { show, close, title } = this.props;
-
+    const {
+      key,
+      name,
+      pictureURL,
+      badgeURL,
+      tags,
+      status,
+      earnBadge,
+      maxGroupSize
+    } = this.props.learningSpace;
     return (
       <Modal show={show} onHide={close} bsSize="large">
         <Modal.Header closeButton>
@@ -136,6 +183,7 @@ class FormModal extends Component {
                     type="text"
                     id="name"
                     name="name"
+                    defaultValue={name}
                     placeholder="Enter Name of Learning Space"
                     onChange={this.handleNameChange.bind(this)}
                   />
@@ -147,6 +195,7 @@ class FormModal extends Component {
                     type="text"
                     name="maxgroupsize"
                     id="maxgroupsize"
+                    defaultValue={maxGroupSize}
                     placeholder="Enter Maximum Group Size"
                     onChange={this.handleMaxSizeChange.bind(this)}
                   />
@@ -172,6 +221,7 @@ class FormModal extends Component {
                     type="text"
                     name="earnbadge"
                     id="earnbadge"
+                    defaultValue={earnBadge}
                     placeholder="Enter number of attempts needed"
                     onChange={this.handleEarnBadge.bind(this)}
                   />
@@ -231,4 +281,4 @@ class FormModal extends Component {
   }
 }
 
-export default connect()(FormModal);
+export default connect()(EditFormModal);

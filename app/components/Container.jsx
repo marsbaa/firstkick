@@ -1,27 +1,18 @@
 import React, { Component } from 'react';
 import { DragDropContext } from 'react-dnd';
-import MultiBackend, { TouchTransition } from 'react-dnd-multi-backend';
+import MultiBackend, {
+  Preview,
+  TouchTransition
+} from 'react-dnd-multi-backend';
 import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import LearningSpaceSelector from 'LearningSpaceSelector';
 import Student from 'Student';
-import {
-  Grid,
-  Row,
-  Col,
-  Glyphicon,
-  Well,
-  DropdownButton,
-  MenuItem,
-  ButtonToolbar
-} from 'react-bootstrap';
-var actions = require('actions');
+import BadgeCheck from 'BadgeCheck';
+import StudentModal from 'StudentModal';
+import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import update from 'react/lib/update';
-import Speech from 'react-speech';
-import Wad from 'web-audio-daw';
 import { sHeader } from 'styles.css';
-import firebase from 'app/firebase';
 import {
   startStudents,
   startLearningSpaces,
@@ -39,7 +30,8 @@ import styled from 'styled-components';
 const HTML5toTouch = {
   backends: [
     {
-      backend: HTML5Backend
+      backend: HTML5Backend,
+      preview: true
     },
     {
       backend: TouchBackend({ enableMouseEvents: true }), // Note that you can call your backends with options
@@ -55,7 +47,7 @@ const SHeader = styled(Row)`
   border-style: solid;
   border-color: white;
   border-top-color: rgba(0,0,0,0.4);
-  padding: 10px 10px;
+  padding: 10px 5px;
   margin-left: 10px;
   margin-right: 10px;
   color: #656565;
@@ -83,12 +75,36 @@ class Container extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      showStudentModal: false,
+      student: ''
+    };
     this.handleDropOutside = this.handleDropOutside.bind(this);
   }
+
+  closeS(e) {
+    this.setState({
+      showStudentModal: false
+    });
+  }
+
+  generatePreview(type, item, style) {
+    Object.assign(style, {
+      backgroundColor: item.color,
+      width: '50px',
+      height: '50px'
+    });
+    return (
+      <div style={style}>
+        <img style={{ width: '100px', height: '100px' }} src="image/sun.png" />
+      </div>
+    );
+  }
+
   render() {
     const { learningSpaces, students, learningAgreements } = this.props;
     let dropStudent = 0;
-    let filteredLA = filter(learningAgreements, o => {
+    var filteredLA = filter(learningAgreements, o => {
       if (o.date !== undefined) {
         return moment().isSame(o.date, 'day');
       }
@@ -96,6 +112,13 @@ class Container extends Component {
 
     return (
       <div style={{ margin: '20px 40px 40px 20px' }}>
+        <Preview generator={this.generatePreview} />
+        <StudentModal
+          title="STUDENT DETAILS"
+          show={this.state.showStudentModal}
+          close={this.closeS.bind(this)}
+          student={this.state.student}
+        />
         <Row>
           <Col md={9} lg={9} xs={9}>
             <SHeader>
@@ -120,6 +143,9 @@ class Container extends Component {
                     students={laStudents}
                     maxSize={parseInt(maxGroupSize)}
                     onDrop={item => this.handleDrop(key, item)}
+                    learningAgreements={filter(learningAgreements, {
+                      learningSpaceKey: key
+                    })}
                     moveStudent={item => {
                       this.handleDropOutside(item);
                     }}
@@ -129,9 +155,9 @@ class Container extends Component {
             </SHeader>
 
           </Col>
-          <Col xs={3}>
+          <Col xs={3} md={3} lg={3}>
             <SHeader>
-              <Col xs={6}>
+              <Col xs={6} md={3} lg={3}>
                 <b>Students</b>
               </Col>
               <Col xs={6}>
@@ -143,7 +169,7 @@ class Container extends Component {
               </Col>
             </SHeader>
             <Row style={{ padding: '10px 10px 10px 35px' }}>
-              <Col xs={12}>
+              <Col xs={12} md={12} lg={12}>
                 {Object.keys(students).map(key => {
                   const { name } = students[key];
                   const dropped = find(filteredLA, { studentKey: key });
@@ -163,11 +189,25 @@ class Container extends Component {
               </Col>
 
             </Row>
+            <Row>
+              <Col xs={12} md={12} lg={12}>
+                <BadgeCheck onDrop={item => this.handleBadgeCheck(item)} />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </div>
     );
   }
+
+  handleBadgeCheck(item) {
+    const { students } = this.props;
+    this.setState({
+      showStudentModal: true,
+      student: students[item.id]
+    });
+  }
+
   handleDropOutside(key) {
     const { dispatch, learningAgreements } = this.props;
     let filteredLA = filter(learningAgreements, o => {

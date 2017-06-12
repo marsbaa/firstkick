@@ -3,7 +3,6 @@ import thunk from 'redux-thunk';
 import {
   composeWithDevTools
 } from 'redux-devtools-extension/logOnlyInProduction';
-import { reducer as formReducer } from 'redux-form';
 var {
   learningSpaceReducer,
   fetchingReducer,
@@ -16,8 +15,7 @@ export var configure = (initialState = {}) => {
     learningSpaces: learningSpaceReducer,
     students: studentReducer,
     isFetching: fetchingReducer,
-    learningAgreements: learningAgreementReducer,
-    form: formReducer
+    learningAgreements: learningAgreementReducer
   });
   var store = createStore(
     reducer,

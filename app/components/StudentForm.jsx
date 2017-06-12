@@ -3,22 +3,23 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { Row, Col, Glyphicon } from 'react-bootstrap';
 import { laHeader, inputfile } from 'styles.css';
+import StudentFormModal from 'StudentFormModal';
+import StudentModal from 'StudentModal';
 import styled from 'styled-components';
 import { startStudents, addStudent } from 'actions';
 import isEmpty from 'lodash/isEmpty';
 import Papa from 'papaparse';
 
 const StyledStudentBox = styled.div`
-  border: 3px solid black;
-  border-radius: 10px;
-  background: #FFD503;
-  padding: 0.2rem 0.5rem;
+  border: 1px solid black;
+  background: white;
+  padding: 0.2rem 0.2rem;
   margin-right: 0.5rem;
   margin-bottom: 0.4rem;
   float: left;
-  width: 15rem;
+  width: 14rem;
   text-align: center;
-  font-size: 12px;
+  font-size: 16px;
 `;
 
 const StyledButton = styled.button`
@@ -44,7 +45,40 @@ const StyledButton = styled.button`
   float: right;
 `;
 
+const StyledCircleButton = styled.a`
+  display:block;
+  height: 30px;
+  padding: 5px;
+  width: 30px;
+  border-radius: 50%;
+  border: none;
+  background: #fffce1;
+  color: #656565;
+  &:hover,
+    &:focus {
+      text-decoration: none;
+      color: #c94e50
+    }
+`;
+const SHeader = styled(Row)`
+  height: 35px;
+  border: 1px solid white;
+  border-top-color: rgba(0,0,0,0.4);
+  padding: 10px 5px;
+  margin-left: 20px;
+  margin-right: 20px;
+  color: #656565;
+`;
+
 class StudentForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false,
+      showStudentModal: false,
+      student: ''
+    };
+  }
   componentWillMount() {
     const { dispatch, students } = this.props;
     if (isEmpty(students)) {
@@ -67,166 +101,82 @@ class StudentForm extends Component {
     });
   }
 
-  onSubmit(values) {
-    var { dispatch } = this.props;
-    var student = {
-      name: values.name,
-      grade: 'Prep'
-    };
-    dispatch(addStudent(student));
+  close(e) {
+    this.setState({
+      showModal: false
+    });
   }
 
-  renderField(field) {
-    const { meta: { touched, error } } = field;
-    const className = `form-group ${touched && error ? 'has-error' : ''}`;
-
-    return (
-      <div className={className}>
-        <label>{field.label}</label>
-        <input className={field.className} type={field.type} {...field.input} />
-        <div className="help-block">{touched ? error : ''}</div>
-
-      </div>
-    );
-  }
-
-  handleImageChange(e) {
-    e.preventDefault();
-    let reader = new FileReader();
-    let file = e.target.files[0];
-
-    reader.onloadend = () => {
-      this.setState({
-        file: file,
-        imagePreviewUrl: reader.result
-      });
-    };
-
-    reader.readAsDataURL(file);
+  closeS(e) {
+    this.setState({
+      showStudentModal: false
+    });
   }
 
   render() {
-    const { students, handleSubmit } = this.props;
+    const { students } = this.props;
 
     return (
       <div key="studentform" style={{ margin: '20px 40px 40px 20px' }}>
-        <Row style={{ padding: '10px' }}>
-          <Col xs={9}>
+        <StudentFormModal
+          title="ADD STUDENT"
+          show={this.state.showModal}
+          close={this.close.bind(this)}
+        />
+        <StudentModal
+          title="STUDENT DETAILS"
+          show={this.state.showStudentModal}
+          close={this.closeS.bind(this)}
+          student={this.state.student}
+        />
+        <Row style={{ textAlign: 'center', margin: '10px 20px' }}>
+          <Col xs={10} md={10} lg={10} />
+          <Col xs={2} md={2} lg={2} style={{ paddingLeft: '150px' }}>
+            <StyledCircleButton
+              onClick={() => this.setState({ showModal: true })}
+            >
+              <Glyphicon glyph="plus" />
+            </StyledCircleButton>
+          </Col>
+        </Row>
+        <SHeader>
+          <Col xs={12} md={12} lg={12}>
             {Object.keys(students).map(key => {
               const { name } = students[key];
               return (
-                <StyledStudentBox key={key}>
+                <StyledStudentBox
+                  key={key}
+                  onClick={() =>
+                    this.setState({
+                      student: students[key],
+                      showStudentModal: true
+                    })}
+                >
                   <Row>
-                    <Col xs={6}>
-                      <b style={{ fontSize: '140%' }}>{name.substring(0, 1)}</b>
-                      {name.substring(1, name.length)}
-                    </Col>
-                    <Col xs={6}>
-                      <StyledButton>
-                        <Glyphicon glyph="remove" />
-                      </StyledButton>
+                    <Col xs={12} md={12} lg={12}>
+                      <img src="../image/user.png" style={{ width: '100px' }} />
                     </Col>
                   </Row>
-
+                  <Row>
+                    <Col xs={12} md={12} lg={12}>
+                      <b style={{ fontSize: '120%' }}>{name.substring(0, 1)}</b>
+                      {name.substring(1, name.length)}
+                    </Col>
+                  </Row>
                 </StyledStudentBox>
               );
             })}
           </Col>
-          <Col
-            xs={3}
-            md={3}
-            lg={3}
-            style={{
-              border: '1px solid black',
-              borderRadius: '10px'
-            }}
-          >
-            <Row className="sHeader">
-              <Col xs={10}>
-                <h4 style={{ textAlign: 'center', marginTop: '0px' }}>
-                  Add Student
-                </h4>
-              </Col>
-              <Col xs={2}>
-                <input
-                  name="file"
-                  id="file"
-                  className="inputfile"
-                  type="file"
-                  accept=".csv"
-                  onChange={this.handleChange.bind(this)}
-                />
-                <label htmlFor="file"><Glyphicon glyph="upload" /></label>
-              </Col>
-            </Row>
-            <Row style={{ padding: '10px 46px 40px 10px' }}>
-              <div>
-                <Row style={{ marginTop: '20px' }}>
-                  <Col xs={12}>
-                    <form
-                      style={{ marginTop: '20px', float: 'right' }}
-                      onSubmit={handleSubmit(this.onSubmit.bind(this))}
-                    >
-                      <Field
-                        label="Name"
-                        className="form-control"
-                        type="text"
-                        id="name"
-                        name="name"
-                        component={this.renderField}
-                      />
-                      <label>Picture</label>
-                      <input
-                        type="file"
-                        name="picture"
-                        id="picture"
-                        onChange={this.handleImageChange.bind(this)}
-                      />
-                      <button
-                        style={{
-                          marginTop: '40px',
-                          float: 'right',
-                          width: '100%'
-                        }}
-                        type="submit"
-                        className="btn btn-primary"
-                      >
-                        Submit
-                      </button>
-                    </form>
-                  </Col>
-                </Row>
-              </div>
-
-            </Row>
-          </Col>
-
-        </Row>
+        </SHeader>
       </div>
     );
   }
 }
-function validate(values) {
-  const errors = {};
-  if (!values.name) {
-    errors.name = 'Enter a Name!';
-  }
-  return errors;
-}
 
-StudentForm = reduxForm({
-  validate,
-  form: 'StudentForm'
-})(StudentForm);
-
-const selector = formValueSelector('StudentForm'); // <-- same as form name
-StudentForm = connect(state => {
-  // can select values individually
-  const nameValue = selector(state, 'name');
+function mapStateToProps(state) {
   return {
-    nameValue,
     students: state.students
   };
-})(StudentForm);
+}
 
-export default StudentForm;
+export default connect(mapStateToProps)(StudentForm);
