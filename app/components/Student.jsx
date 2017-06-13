@@ -11,10 +11,10 @@ const style = {
   marginBottom: '0.4rem',
   cursor: 'move',
   float: 'left',
-  width: '100px',
+  width: '120px',
   height: '30px',
   textAlign: 'center',
-  fontSize: '12px'
+  fontSize: '14px'
 };
 
 const studentSource = {

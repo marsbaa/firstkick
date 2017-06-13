@@ -1,10 +1,10 @@
 .laBox {
-  width: 300px;
+  width: 310px;
   color: black;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 14px;
   line-height: normal;
-  height: 180px;
+  height: 200px;
   padding: 0px;
   margin: 5px 5px 25px 5px;
   box-shadow: 2px 2px 2px 2px#888888;
