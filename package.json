@@ -1,7 +1,7 @@
 {
-  "name": "draganddrop",
+  "name": "wpps",
   "version": "1.0.0",
-  "description": "Drag and Drop App",
+  "description": "Learning Agreement",
   "main": "server.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
