@@ -1,4 +1,5 @@
 var express = require('express');
+var path = require('path');
 
 // Create our app
 var app = express();

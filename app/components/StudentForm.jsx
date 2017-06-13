@@ -154,7 +154,7 @@ class StudentForm extends Component {
                 >
                   <Row>
                     <Col xs={12} md={12} lg={12}>
-                      <img src="../image/user.png" style={{ width: '100px' }} />
+                      <img src="/image/user.png" style={{ width: '100px' }} />
                     </Col>
                   </Row>
                   <Row>
