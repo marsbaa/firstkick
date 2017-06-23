@@ -12,7 +12,7 @@ const style = {
   cursor: 'move',
   float: 'left',
   width: '120px',
-  height: '30px',
+  height: '35px',
   textAlign: 'center',
   fontSize: '14px'
 };

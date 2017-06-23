@@ -1,5 +1,5 @@
 .laBox {
-  width: 310px;
+  width: 290px;
   color: black;
   text-align: center;
   font-size: 14px;
@@ -9,6 +9,7 @@
   margin: 5px 5px 25px 5px;
   box-shadow: 2px 2px 2px 2px#888888;
   float: left;
+  background-size: 100% 100%;
 }
 
 .laHeader {
