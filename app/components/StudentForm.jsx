@@ -87,7 +87,7 @@ class StudentForm extends Component {
   }
 
   handleChange(e) {
-    var { dispatch, coaches } = this.props;
+    var { dispatch } = this.props;
     Papa.parse(e.target.files[0], {
       delimiter: '',
       newline: '',

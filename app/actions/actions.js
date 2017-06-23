@@ -406,12 +406,16 @@ export const addStudent = (student, pictureFile) => {
         };
         studentRef.update(updates);
         student.key = newKey;
-        return {
-          type: 'ADD_STUDENT',
-          student
-        };
+        dispatch(addS(student));
       }
     );
+  };
+};
+
+export const addS = student => {
+  return {
+    type: 'ADD_STUDENT',
+    student
   };
 };
 
