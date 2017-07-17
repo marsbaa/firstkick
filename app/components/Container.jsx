@@ -109,6 +109,7 @@ class Container extends Component {
         return moment().isSame(o.date, 'day');
       }
     });
+    filteredLA = filter(filteredLA, {status: 'current'});
 
     return (
       <div style={{ margin: '20px 40px 40px 20px' }}>
