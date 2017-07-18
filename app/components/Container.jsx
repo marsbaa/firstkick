@@ -109,7 +109,7 @@ class Container extends Component {
         return moment().isSame(o.date, 'day');
       }
     });
-    filteredLA = filter(filteredLA, {status: 'current'});
+    var filteredLS = filter(learningSpaces, {status: 'current'})
 
     return (
       <div style={{ margin: '20px 40px 40px 20px' }}>
@@ -123,14 +123,14 @@ class Container extends Component {
         <Row>
           <Col md={9} lg={9} xs={9}>
             <SHeader>
-              {Object.keys(learningSpaces).map(id => {
+              {Object.keys(filteredLS).map(id => {
                 const {
                   key,
                   name,
                   pictureURL,
                   badgeURL,
                   maxGroupSize
-                } = learningSpaces[id];
+                } = filteredLS[id];
                 const laStudents = filter(filteredLA, {
                   learningSpaceKey: key
                 });
