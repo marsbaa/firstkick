@@ -7,7 +7,8 @@ var {
   learningSpaceReducer,
   fetchingReducer,
   studentReducer,
-  learningAgreementReducer
+  learningAgreementReducer,
+  gradeReducer
 } = require('reducers');
 
 export var configure = (initialState = {}) => {
@@ -15,7 +16,8 @@ export var configure = (initialState = {}) => {
     learningSpaces: learningSpaceReducer,
     students: studentReducer,
     isFetching: fetchingReducer,
-    learningAgreements: learningAgreementReducer
+    learningAgreements: learningAgreementReducer,
+    grade: gradeReducer
   });
   var store = createStore(
     reducer,

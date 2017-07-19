@@ -91,11 +91,18 @@ class NavBar extends Component {
             <SGlyphicon glyph="user" /> Manage Students
           </StyledLink>
           <StyledLink
+            to="/gradeform"
+            onClick={() => this.setState({ show: false })}
+          >
+            <SGlyphicon glyph="globe" /> Manage Grade Level
+          </StyledLink>
+          <StyledLink
             to="/summary"
             onClick={() => this.setState({ show: false })}
           >
             <SGlyphicon glyph="stats" /> View Summary
           </StyledLink>
+
         </Menu>
         <main id="page-wrap">
           <StyledNavBar>

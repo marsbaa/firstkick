@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import Container from 'Container';
+import Dashboard from 'Dashboard';
 import LearningSpaceForm from 'LearningSpaceForm';
+import Container from 'Container';
+import GradeForm from 'GradeForm';
 import StudentForm from 'StudentForm';
 import NavBar from 'NavBar';
 import { Provider } from 'react-redux';
@@ -16,8 +18,10 @@ ReactDOM.render(
         <NavBar />
         <Switch>
           <Route path="/learningspaceform" component={LearningSpaceForm} />
+          <Route path="/gradeform" component={GradeForm} />
           <Route path="/students" component={StudentForm} />
-          <Route path="/" component={Container} />
+          <Route path="/:grade" component={Container} />
+          <Route path="/" component={Dashboard} />
         </Switch>
       </div>
     </Router>

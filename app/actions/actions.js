@@ -424,3 +424,43 @@ export const isFetching = () => {
     type: 'IS_FETCHING'
   };
 };
+
+//Actions for grade
+export const startGrade = () => {
+  return dispatch => {
+    var gradeRef = firebaseRef.child('grade');
+    gradeRef.once('value').then(snapshot => {
+      const grade = snapshot.val();
+      var parsedGrade = [];
+      if (grade !== null) {
+        Object.keys(grade).forEach(gradeId => {
+          parsedGrade[gradeId] = {
+            key: gradeId,
+            ...grade[gradeId]
+          };
+        });
+      }
+      dispatch(addGrades(parsedGrade));
+    });
+  };
+};
+
+export const addGrades = grades => {
+  return {
+    type: 'ADD_GRADES',
+    grades
+  };
+};
+
+export const addGrade = grade => {
+  var gradeRef = firebaseRef.child('grade');
+  var newKey = gradeRef.push().key;
+  var updates = {};
+  updates[newKey] = grade;
+  gradeRef.update(updates);
+  grade.key = newKey;
+  return {
+    type: 'ADD_GRADE',
+    grade
+  };
+};

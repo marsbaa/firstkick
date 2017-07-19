@@ -87,3 +87,19 @@ export var fetchingReducer = (state = { completed: false }, action) => {
       return state;
   }
 };
+
+export var gradeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case 'ADD_GRADES':
+      return { ...action.grades };
+    case 'ADD_GRADE':
+      return {
+        ...state,
+        [action.grade.key]: {
+          ...action.grade
+        }
+      };
+    default:
+      return state;
+  }
+};

@@ -102,7 +102,9 @@ class Container extends Component {
   }
 
   render() {
-    const { learningSpaces, students, learningAgreements } = this.props;
+    const { learningSpaces, students, learningAgreements, grade } = this.props;
+    const selectedGrade = this.props.match.params.grade;
+    console.log(selectedGrade);
     let dropStudent = 0;
     var filteredLA = filter(learningAgreements, o => {
       if (o.date !== undefined) {
