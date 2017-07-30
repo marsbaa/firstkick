@@ -464,3 +464,12 @@ export const addGrade = grade => {
     grade
   };
 };
+
+//Actions for Selected grade
+
+export const selectGrade = grade => {
+  return {
+    type: 'SELECT_GRADE',
+    grade
+  };
+};

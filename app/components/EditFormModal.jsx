@@ -7,23 +7,23 @@ import { addLearningSpace, updateLearningSpace } from 'actions';
 import { connect } from 'react-redux';
 
 const StyledButton = styled.a`
-display: inline-block;
-width: 80px;
-height: 30px;
-text-align: center;
-line-height: 2.5em;
-cursor: pointer;
-background: #fffce1;
-text-transform: uppercase;
-letter-spacing: 1px;
-font-size: 0.8em;
-font-weight: 900;
-color: #656565;
-margin: 10px 10px;
-&:hover,
+  display: inline-block;
+  width: 80px;
+  height: 30px;
+  text-align: center;
+  line-height: 2.5em;
+  cursor: pointer;
+  background: #fffce1;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.8em;
+  font-weight: 900;
+  color: #656565;
+  margin: 10px 10px;
+  &:hover,
   &:focus {
     text-decoration: none;
-    color: #c94e50
+    color: #c94e50;
   }
 `;
 
@@ -38,7 +38,8 @@ class EditFormModal extends Component {
       earnBadge: '',
       lsName: '',
       maxgroupsize: '',
-      multiValue: []
+      multiValue: [],
+      grade: 'Prep'
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -75,6 +76,11 @@ class EditFormModal extends Component {
 
   handleEarnBadge(e) {
     this.setState({ earnBadge: e.target.value });
+  }
+
+  handleGradeChange(e) {
+    console.log(e);
+    this.setState({ grade: e.target.value });
   }
 
   handleChange(multiValue) {
@@ -128,14 +134,17 @@ class EditFormModal extends Component {
     });
     var learningSpace = {
       key: this.props.learningSpace.key,
+      grade: this.state.grade,
       name: this.state.lsName,
       maxGroupSize: this.state.maxgroupsize,
-      pictureFilename: this.state.pictureFile !== ''
-        ? this.state.pictureFile.name
-        : this.props.learningSpace.pictureFilename,
-      badgeFilename: this.state.badgeFile !== ''
-        ? this.state.badgeFile.name
-        : this.props.learningSpace.badgeFilename,
+      pictureFilename:
+        this.state.pictureFile !== ''
+          ? this.state.pictureFile.name
+          : this.props.learningSpace.pictureFilename,
+      badgeFilename:
+        this.state.badgeFile !== ''
+          ? this.state.badgeFile.name
+          : this.props.learningSpace.badgeFilename,
       earnBadge: this.state.earnBadge,
       pictureURL: this.state.picturePreviewUrl,
       badgeURL: this.state.badgePreviewUrl,
@@ -168,7 +177,9 @@ class EditFormModal extends Component {
     return (
       <Modal show={show} onHide={close} bsSize="large">
         <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
+          <Modal.Title>
+            {title}
+          </Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -176,12 +187,26 @@ class EditFormModal extends Component {
             <Col xs={7} md={7} lg={7}>
               <form>
                 <div className="form-group">
+                  <label>Grade</label>
+                  <select
+                    className="form-control"
+                    onChange={this.handleGradeChange.bind(this)}
+                  >
+                    <option value="Prep">Prep</option>
+                    <option value="Grade1">Grade 1</option>
+                    <option value="Grade2">Grade 2</option>
+                    <option value="Grade3">Grade 3</option>
+                    <option value="Grade4">Grade 4</option>
+                    <option value="Grade5">Grade 5</option>
+                    <option value="Grade6">Grade 6</option>
+                  </select>
+                </div>
+                <div className="form-group">
                   <label>Name</label>
                   <input
                     className="form-control"
                     style={{}}
                     type="text"
-                    id="name"
                     name="name"
                     defaultValue={name}
                     placeholder="Enter Name of Learning Space"
@@ -194,7 +219,6 @@ class EditFormModal extends Component {
                     className="form-control"
                     type="text"
                     name="maxgroupsize"
-                    id="maxgroupsize"
                     defaultValue={maxGroupSize}
                     placeholder="Enter Maximum Group Size"
                     onChange={this.handleMaxSizeChange.bind(this)}
@@ -220,7 +244,6 @@ class EditFormModal extends Component {
                     className="form-control"
                     type="text"
                     name="earnbadge"
-                    id="earnbadge"
                     defaultValue={earnBadge}
                     placeholder="Enter number of attempts needed"
                     onChange={this.handleEarnBadge.bind(this)}
@@ -255,27 +278,27 @@ class EditFormModal extends Component {
                     />
                   </Col>
                   <Col xs={8} style={{ margin: '0px', paddingTop: '10px' }}>
-                    <b>{this.state.lsName}</b>
+                    <b>
+                      {this.state.lsName}
+                    </b>
                   </Col>
                   <Col xs={2} style={{ margin: '0px', paddingTop: '10px' }}>
-                    <b>0/{this.state.maxgroupsize}</b>
+                    <b>
+                      0/{this.state.maxgroupsize}
+                    </b>
                   </Col>
                 </Row>
               </div>
             </Col>
           </Row>
-
         </Modal.Body>
 
         <Modal.Footer>
           <div style={{ textAlign: 'center' }}>
             <StyledButton onClick={close}>Cancel</StyledButton>
-            <StyledButton onClick={this.handleSubmit}>
-              Submit
-            </StyledButton>
+            <StyledButton onClick={this.handleSubmit}>Submit</StyledButton>
           </div>
         </Modal.Footer>
-
       </Modal>
     );
   }

@@ -103,3 +103,12 @@ export var gradeReducer = (state = {}, action) => {
       return state;
   }
 };
+
+export var selectedGradeReducer = (state = 'select', action) => {
+  switch (action.type) {
+    case 'SELECT_GRADE':
+      return action.grade;
+    default:
+      return state;
+  }
+};

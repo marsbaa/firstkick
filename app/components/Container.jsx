@@ -104,12 +104,18 @@ class Container extends Component {
   render() {
     const { learningSpaces, students, learningAgreements, grade } = this.props;
     const selectedGrade = this.props.match.params.grade;
-    console.log(selectedGrade);
     let dropStudent = 0;
-    var filteredLA = filter(learningAgreements, o => {
+    let filteredLA = filter(learningAgreements, o => {
       if (o.date !== undefined) {
         return moment().isSame(o.date, 'day');
       }
+    });
+    let filteredStudents = filter(students, { grade: selectedGrade });
+    filteredLA = filter(filteredLA, o => {
+      return find(filteredStudents, { key: o.studentKey }) !== undefined;
+    });
+    let filteredLearningSpaces = filter(learningSpaces, {
+      grade: selectedGrade
     });
 
     return (
@@ -124,14 +130,15 @@ class Container extends Component {
         <Row>
           <Col md={9} lg={9} xs={9}>
             <SHeader>
-              {Object.keys(learningSpaces).map(id => {
+              {Object.keys(filteredLearningSpaces).map(id => {
                 const {
                   key,
                   name,
                   pictureURL,
                   badgeURL,
-                  maxGroupSize
-                } = learningSpaces[id];
+                  maxGroupSize,
+                  earnBadge
+                } = filteredLearningSpaces[id];
                 const laStudents = filter(filteredLA, {
                   learningSpaceKey: key
                 });
@@ -143,6 +150,8 @@ class Container extends Component {
                     picture={pictureURL}
                     badge={badgeURL}
                     students={laStudents}
+                    id={key}
+                    earnBadge={earnBadge}
                     maxSize={parseInt(maxGroupSize)}
                     onDrop={item => this.handleDrop(key, item)}
                     learningAgreements={filter(learningAgreements, {
@@ -155,7 +164,6 @@ class Container extends Component {
                 );
               })}
             </SHeader>
-
           </Col>
           <Col xs={3} md={3} lg={3}>
             <SHeader>
@@ -164,16 +172,16 @@ class Container extends Component {
               </Col>
               <Col xs={6}>
                 <b style={{ float: 'right' }}>
-                  {size(students) - dropStudent}
+                  {size(filteredStudents) - dropStudent}
                   /
-                  {size(students)}
+                  {size(filteredStudents)}
                 </b>
               </Col>
             </SHeader>
             <Row style={{ padding: '10px 10px 10px 35px' }}>
               <Col xs={12} md={12} lg={12}>
-                {Object.keys(students).map(key => {
-                  const { name } = students[key];
+                {Object.keys(filteredStudents).map(id => {
+                  const { name, key } = filteredStudents[id];
                   const dropped = find(filteredLA, { studentKey: key });
                   if (dropped === undefined) {
                     return (
@@ -189,7 +197,6 @@ class Container extends Component {
                   }
                 })}
               </Col>
-
             </Row>
             <Row>
               <Col xs={12} md={12} lg={12}>
@@ -243,7 +250,7 @@ class Container extends Component {
 
 function mapStateToProps(state) {
   return {
-    learningSpaces: state.learningSpaces,
+    learningSpaces: filter(state.learningSpaces, { status: 'current' }),
     students: state.students,
     learningAgreements: state.learningAgreements
   };

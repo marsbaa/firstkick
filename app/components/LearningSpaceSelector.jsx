@@ -7,8 +7,14 @@ import _ from 'lodash';
 import { laBox, laFooter } from 'styles.css';
 
 const studentTarget = {
-  canDrop(props) {
-    return _.size(props.students) < props.maxSize;
+  canDrop(props, monitor) {
+    let { id } = monitor.getItem();
+
+    return (
+      _.size(props.students) < props.maxSize &&
+      _.size(_.filter(props.learningAgreements, { studentKey: id })) <
+        props.earnBadge
+    );
   },
   drop(props, monitor) {
     props.onDrop(monitor.getItem());
@@ -33,7 +39,8 @@ export default class LearningSpace extends Component {
     students: PropTypes.array.isRequired,
     learningAgreements: PropTypes.array.isRequired,
     maxSize: PropTypes.number.isRequired,
-    moveStudent: PropTypes.func.isRequired
+    moveStudent: PropTypes.func.isRequired,
+    id: PropTypes.string
   };
 
   render() {
@@ -47,7 +54,9 @@ export default class LearningSpace extends Component {
       students,
       learningAgreements,
       maxSize,
-      moveStudent
+      moveStudent,
+      id,
+      earnBadge
     } = this.props;
     const isActive = canDrop && isOver;
 
@@ -95,10 +104,14 @@ export default class LearningSpace extends Component {
             <img style={{ marginTop: '5px', width: '20px' }} src={badge} />
           </Col>
           <Col xs={8} style={{ margin: '0px', paddingTop: '10px' }}>
-            <b>{name}</b>
+            <b>
+              {name}
+            </b>
           </Col>
           <Col xs={2} style={{ margin: '0px', paddingTop: '10px' }}>
-            <b>{_.size(students)}/{maxSize}</b>
+            <b>
+              {_.size(students)}/{maxSize}
+            </b>
           </Col>
         </Row>
       </div>

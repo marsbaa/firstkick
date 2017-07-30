@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Button, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Row, Col, Checkbox } from 'react-bootstrap';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { addGrade } from 'actions';
@@ -16,23 +16,23 @@ const StyledStudentBox = styled.div`
   font-size: 16px;
 `;
 const StyledButton = styled.a`
-display: inline-block;
-width: 80px;
-height: 30px;
-text-align: center;
-line-height: 2.5em;
-cursor: pointer;
-background: #fffce1;
-text-transform: uppercase;
-letter-spacing: 1px;
-font-size: 0.8em;
-font-weight: 900;
-color: #656565;
-margin: 10px 10px;
-&:hover,
+  display: inline-block;
+  width: 80px;
+  height: 30px;
+  text-align: center;
+  line-height: 2.5em;
+  cursor: pointer;
+  background: #fffce1;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.8em;
+  font-weight: 900;
+  color: #656565;
+  margin: 10px 10px;
+  &:hover,
   &:focus {
     text-decoration: none;
-    color: #c94e50
+    color: #c94e50;
   }
 `;
 
@@ -41,7 +41,8 @@ class GradeFormModal extends Component {
     super(props);
     this.state = {
       name: '',
-      slots: ''
+      slots: '',
+      badge: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -52,6 +53,10 @@ class GradeFormModal extends Component {
 
   handleSlotsChange(e) {
     this.setState({ slots: e.target.value });
+  }
+
+  handleBadge(e) {
+    this.setState({ badge: this.state.badge ? false : true });
   }
 
   handleSubmit() {
@@ -69,7 +74,9 @@ class GradeFormModal extends Component {
     return (
       <Modal show={show} onHide={close} bsSize="small">
         <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
+          <Modal.Title>
+            {title}
+          </Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -99,21 +106,25 @@ class GradeFormModal extends Component {
                     onChange={this.handleSlotsChange.bind(this)}
                   />
                 </div>
+                <Checkbox
+                  name="badgeEnable"
+                  style={{ marginRight: '5px' }}
+                  checked={this.state.badge}
+                  onChange={this.handlebadge}
+                >
+                  Enable Badges
+                </Checkbox>
               </form>
             </Col>
           </Row>
-
         </Modal.Body>
 
         <Modal.Footer>
           <div style={{ textAlign: 'center' }}>
             <StyledButton onClick={close}>Cancel</StyledButton>
-            <StyledButton onClick={this.handleSubmit}>
-              Submit
-            </StyledButton>
+            <StyledButton onClick={this.handleSubmit}>Submit</StyledButton>
           </div>
         </Modal.Footer>
-
       </Modal>
     );
   }

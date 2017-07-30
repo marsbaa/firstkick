@@ -23,17 +23,21 @@ class Dashboard extends React.Component {
       >
         {Object.keys(grade).map(key => {
           return (
-            <Link to={'/' + grade[key].name}>
+            <Link key={key} to={'/' + grade[key].name}>
               <div
                 style={{
                   width: '200px',
                   height: '200px',
                   backgroundColor: 'papayawhip',
-                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   margin: '5px'
                 }}
               >
-                <h1>{grade[key].name}</h1>
+                <h1>
+                  {grade[key].name}
+                </h1>
               </div>
             </Link>
           );

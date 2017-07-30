@@ -21,9 +21,9 @@ const StyledButton = styled.button`
   vertical-align: middle;
   cursor: pointer;
   -webkit-user-select: none;
-   -moz-user-select: none;
-    -ms-user-select: none;
-        user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   background-image: none;
   border: 1px solid #656565;
   border-radius: 5px;
@@ -45,7 +45,6 @@ const LearningSpace = props => {
   const ls = props.learningSpace;
   return (
     <div
-      key={key}
       className="laBox"
       style={{
         backgroundImage: `url(${pictureURL})`
@@ -90,13 +89,16 @@ const LearningSpace = props => {
           <img style={{ marginTop: '5px', width: '20px' }} src={badgeURL} />
         </Col>
         <Col xs={8} md={8} lg={8} style={{ margin: '0px', paddingTop: '10px' }}>
-          <b>{name}</b>
+          <b>
+            {name}
+          </b>
         </Col>
         <Col xs={2} md={2} lg={2} style={{ margin: '0px', paddingTop: '10px' }}>
-          <b>0/{maxGroupSize}</b>
+          <b>
+            0/{maxGroupSize}
+          </b>
         </Col>
       </Row>
-
     </div>
   );
 };

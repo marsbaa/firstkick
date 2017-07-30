@@ -20,23 +20,23 @@ const StyledStudentBox = styled.div`
   font-size: 16px;
 `;
 const StyledButton = styled.a`
-display: inline-block;
-width: 80px;
-height: 30px;
-text-align: center;
-line-height: 2.5em;
-cursor: pointer;
-background: #fffce1;
-text-transform: uppercase;
-letter-spacing: 1px;
-font-size: 0.8em;
-font-weight: 900;
-color: #656565;
-margin: 10px 10px;
-&:hover,
+  display: inline-block;
+  width: 80px;
+  height: 30px;
+  text-align: center;
+  line-height: 2.5em;
+  cursor: pointer;
+  background: #fffce1;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.8em;
+  font-weight: 900;
+  color: #656565;
+  margin: 10px 10px;
+  &:hover,
   &:focus {
     text-decoration: none;
-    color: #c94e50
+    color: #c94e50;
   }
 `;
 const SHeader = styled(Row)`
@@ -107,7 +107,9 @@ class StudentModal extends Component {
     return (
       <Modal show={show} onHide={close} bsSize="large">
         <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
+          <Modal.Title>
+            {title}
+          </Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -141,7 +143,7 @@ class StudentModal extends Component {
                             learningSpaceKey: key
                           })
                         );
-                        if (count === parseInt(earnBadge)) {
+                        if (count >= parseInt(earnBadge)) {
                           return (
                             <img
                               src={badgeURL}
@@ -151,7 +153,6 @@ class StudentModal extends Component {
                         }
                       })}
                     </div>
-
                   </Col>
                 </SHeader>
               </StyledStudentBox>
@@ -180,7 +181,6 @@ class StudentModal extends Component {
             <StyledButton onClick={close}>Done</StyledButton>
           </div>
         </Modal.Footer>
-
       </Modal>
     );
   }

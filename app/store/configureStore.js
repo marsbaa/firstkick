@@ -1,14 +1,13 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import {
-  composeWithDevTools
-} from 'redux-devtools-extension/logOnlyInProduction';
+import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction';
 var {
   learningSpaceReducer,
   fetchingReducer,
   studentReducer,
   learningAgreementReducer,
-  gradeReducer
+  gradeReducer,
+  selectedGradeReducer
 } = require('reducers');
 
 export var configure = (initialState = {}) => {
@@ -17,7 +16,8 @@ export var configure = (initialState = {}) => {
     students: studentReducer,
     isFetching: fetchingReducer,
     learningAgreements: learningAgreementReducer,
-    grade: gradeReducer
+    grade: gradeReducer,
+    selectedGrade: selectedGradeReducer
   });
   var store = createStore(
     reducer,

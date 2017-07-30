@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import {
   Row,
@@ -18,7 +19,8 @@ import isEmpty from 'lodash/isEmpty';
 import {
   addLearningSpace,
   learningSpaceStatus,
-  startLearningSpaces
+  startLearningSpaces,
+  startGrade
 } from 'actions';
 
 const StyledButton = styled.button`
@@ -33,9 +35,9 @@ const StyledButton = styled.button`
   vertical-align: middle;
   cursor: pointer;
   -webkit-user-select: none;
-   -moz-user-select: none;
-    -ms-user-select: none;
-        user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   background-image: none;
   border: 1px solid #656565;
   border-radius: 5px;
@@ -58,14 +60,14 @@ const StyledButtonGroup = styled.a`
   font-weight: 800;
   color: #656565;
   &:hover,
-    &:focus {
-      text-decoration: none;
-      color: #c94e50
-    }
+  &:focus {
+    text-decoration: none;
+    color: #c94e50;
+  }
 `;
 
 const StyledCircleButton = styled.a`
-  display:block;
+  display: block;
   height: 30px;
   padding: 5px;
   width: 30px;
@@ -74,10 +76,10 @@ const StyledCircleButton = styled.a`
   background: #fffce1;
   color: #656565;
   &:hover,
-    &:focus {
-      text-decoration: none;
-      color: #c94e50
-    }
+  &:focus {
+    text-decoration: none;
+    color: #c94e50;
+  }
 `;
 
 const SHeader = styled(Row)`
@@ -99,15 +101,20 @@ class LearningSpaceForm extends Component {
       showModal: false,
       showEditModal: false,
       filter: 'current',
-      learningSpace: {}
+      learningSpace: {},
+      gradeSelected: 'Prep'
     };
     this.open = this.open.bind(this);
+    this.handleGrade = this.handleGrade.bind(this);
   }
 
-  componentDidMount() {
-    const { dispatch, learningSpaces } = this.props;
+  componentWillMount() {
+    const { dispatch, learningSpaces, grades } = this.props;
     if (isEmpty(learningSpaces)) {
       dispatch(startLearningSpaces());
+    }
+    if (isEmpty(grades)) {
+      dispatch(startGrade());
     }
   }
 
@@ -139,13 +146,17 @@ class LearningSpaceForm extends Component {
     });
   }
 
+  handleGrade(e) {
+    this.setState({ gradeSelected: e.target.value });
+  }
+
   changeLearningSpaceStatus(key, status) {
     const { dispatch } = this.props;
     dispatch(learningSpaceStatus(key, status));
   }
 
   render() {
-    const { learningSpaces } = this.props;
+    const { learningSpaces, grades } = this.props;
     let activeCurrent, activeArchived;
     if (this.state.filter === 'current') {
       activeCurrent = {
@@ -159,6 +170,12 @@ class LearningSpaceForm extends Component {
         backgroundColor: '#c94e50',
         color: '#fffce1'
       };
+    }
+    let filteredLearningSpaces;
+    if (this.state.gradeSelected !== '') {
+      filteredLearningSpaces = filter(learningSpaces, {
+        grade: this.state.gradeSelected
+      });
     }
     return (
       <div>
@@ -175,7 +192,29 @@ class LearningSpaceForm extends Component {
         />
 
         <Row style={{ textAlign: 'center', margin: '10px 20px' }}>
-          <Col xs={10} md={10} lg={10} style={{ paddingLeft: '200px' }}>
+          <Col xs={2} md={2} lg={2}>
+            <FormGroup
+              controlId="formControlsSelect"
+              style={{ marginBottom: '0' }}
+            >
+              <FormControl
+                id="gradeSelect"
+                componentClass="select"
+                placeholder="select"
+                onChange={this.handleGrade}
+              >
+                {Object.keys(grades).map(key => {
+                  const { name } = grades[key];
+                  return (
+                    <option key={key} value={name}>
+                      {name}
+                    </option>
+                  );
+                })}
+              </FormControl>
+            </FormGroup>
+          </Col>
+          <Col xs={8} md={8} lg={8}>
             <StyledButtonGroup
               style={{
                 borderTopLeftRadius: '10px',
@@ -208,12 +247,12 @@ class LearningSpaceForm extends Component {
 
         <SHeader>
           <Col xs={12} md={12} lg={12}>
-            {Object.keys(learningSpaces).map(id => {
-              if (this.state.filter === learningSpaces[id].status) {
+            {Object.keys(filteredLearningSpaces).map(id => {
+              if (this.state.filter === filteredLearningSpaces[id].status) {
                 return (
                   <LearningSpace
                     key={id}
-                    learningSpace={learningSpaces[id]}
+                    learningSpace={filteredLearningSpaces[id]}
                     changeLearningSpaceStatus={this.changeLearningSpaceStatus.bind(
                       this
                     )}
@@ -231,7 +270,9 @@ class LearningSpaceForm extends Component {
 }
 function mapStateToProps(state) {
   return {
-    learningSpaces: state.learningSpaces
+    learningSpaces: state.learningSpaces,
+    grades: state.grade,
+    selectedGrade: state.selectedGrade
   };
 }
 

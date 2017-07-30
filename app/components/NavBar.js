@@ -6,10 +6,10 @@ import styled from 'styled-components';
 import Menu from 'react-burger-menu/lib/menus/slide';
 
 const StyledNavBar = styled.div`
-  border-width : 1px;
-  border-style : solid;
+  border-width: 1px;
+  border-style: solid;
   borde-color: none;
-  border-bottom-color: rgba(0,0,0,0.14);
+  border-bottom-color: rgba(0, 0, 0, 0.14);
   padding: 10px;
   margin: 0px;
   color: #656565;
@@ -102,7 +102,6 @@ class NavBar extends Component {
           >
             <SGlyphicon glyph="stats" /> View Summary
           </StyledLink>
-
         </Menu>
         <main id="page-wrap">
           <StyledNavBar>
@@ -123,7 +122,7 @@ class NavBar extends Component {
                       display: 'block'
                     }}
                   >
-                    Prep - Learning Agreement
+                    Learning Agreement
                   </font>
                 </Link>
               </Col>
