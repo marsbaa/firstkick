@@ -117,7 +117,6 @@ class Container extends Component {
     let filteredLearningSpaces = filter(learningSpaces, {
       grade: selectedGrade
     });
-    var filteredLS = filter(learningSpaces, {status: 'current'})
 
     return (
       <div style={{ margin: '20px 40px 40px 20px' }}>
@@ -131,9 +130,7 @@ class Container extends Component {
         <Row>
           <Col md={9} lg={9} xs={9}>
             <SHeader>
-
               {Object.keys(filteredLearningSpaces).map(id => {
-              {Object.keys(filteredLS).map(id => {
                 const {
                   key,
                   name,
@@ -142,8 +139,6 @@ class Container extends Component {
                   maxGroupSize,
                   earnBadge
                 } = filteredLearningSpaces[id];
-                  maxGroupSize
-                } = filteredLS[id];
                 const laStudents = filter(filteredLA, {
                   learningSpaceKey: key
                 });
