@@ -84,6 +84,11 @@ const LearningSpace = props => {
             : null}
         </Col>
       </Row>
+      <Row>
+        <Col xs={12} md={12} lg={12}>
+          <div style={{ height: '40px' }} />
+        </Col>
+      </Row>
       <Row className="laFooter">
         <Col xs={2} md={2} lg={2}>
           <img style={{ marginTop: '5px', width: '20px' }} src={badgeURL} />

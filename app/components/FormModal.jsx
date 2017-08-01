@@ -134,7 +134,7 @@ class FormModal extends Component {
 
         <Modal.Body>
           <Row style={{ padding: '20px' }}>
-            <Col xs={7} md={7} lg={7}>
+            <Col xs={6} md={6} lg={6}>
               <form>
                 <div className="form-group">
                   <label>Grade</label>
@@ -209,14 +209,14 @@ class FormModal extends Component {
                 />
               </form>
             </Col>
-            <Col xs={5} md={5} lg={5}>
+            <Col xs={6} md={6} lg={6}>
               <div
                 className="laBox"
                 style={{
                   backgroundImage: `url(${this.state.picturePreviewUrl})`
                 }}
               >
-                <div style={{ height: '35px' }} />
+                <div style={{ height: '55px' }} />
                 <Row className="laFooter">
                   <Col xs={2}>
                     <img
