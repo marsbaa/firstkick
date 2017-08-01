@@ -30,15 +30,15 @@ import styled from 'styled-components';
 const style = {
   border: '1px solid black',
   backgroundColor: 'white',
-  padding: '0.2rem 0.5rem',
-  marginRight: '0.5rem',
-  marginBottom: '0.6rem',
+  padding: '0.2rem 0.4rem',
+  marginRight: '0.3rem',
+  marginBottom: '0.4rem',
   cursor: 'move',
   float: 'left',
   width: '120px',
   height: '45px',
   textAlign: 'center',
-  fontSize: '18px'
+  fontSize: '16px'
 };
 
 const HTML5toTouch = {
