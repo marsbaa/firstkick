@@ -159,7 +159,12 @@ class StudentModal extends Component {
             </Col>
             <Col xs={9} md={9} lg={9}>
               {Object.keys(filteredLearningSpaces).map(id => {
-                const { badgeURL, earnBadge, key } = filteredLearningSpaces[id];
+                const {
+                  badgeURL,
+                  earnBadge,
+                  key,
+                  name
+                } = filteredLearningSpaces[id];
                 const count = size(
                   filter(filteredLearningAgreements, { learningSpaceKey: key })
                 );
@@ -169,6 +174,7 @@ class StudentModal extends Component {
                     earned={count}
                     toComplete={earnBadge}
                     badge={badgeURL}
+                    title={name}
                   />
                 );
               })}

@@ -27,6 +27,20 @@ import size from 'lodash/size';
 import moment from 'moment';
 import styled from 'styled-components';
 
+const style = {
+  border: '1px solid black',
+  backgroundColor: 'white',
+  padding: '0.2rem 0.5rem',
+  marginRight: '0.5rem',
+  marginBottom: '0.4rem',
+  cursor: 'move',
+  float: 'left',
+  width: '125px',
+  height: '45px',
+  textAlign: 'center',
+  fontSize: '18px'
+};
+
 const HTML5toTouch = {
   backends: [
     {
@@ -103,6 +117,7 @@ class Container extends Component {
 
   render() {
     const { learningSpaces, students, learningAgreements, grade } = this.props;
+    document.addEventListener('contextmenu', event => event.preventDefault());
     const selectedGrade = this.props.match.params.grade;
     let dropStudent = 0;
     let filteredLA = filter(learningAgreements, o => {
@@ -189,6 +204,7 @@ class Container extends Component {
                         key={key}
                         name={name}
                         id={key}
+                        styling={style}
                         moveStudent={() => {
                           this.handleDropOutside(key);
                         }}

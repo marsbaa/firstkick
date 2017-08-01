@@ -3,20 +3,6 @@ import { DragSource } from 'react-dnd';
 import { Badge } from 'react-bootstrap';
 import ItemTypes from 'ItemTypes';
 
-const style = {
-  border: '1px solid black',
-  backgroundColor: 'white',
-  padding: '0.2rem 0.5rem',
-  marginRight: '0.5rem',
-  marginBottom: '0.4rem',
-  cursor: 'move',
-  float: 'left',
-  width: '120px',
-  height: '35px',
-  textAlign: 'center',
-  fontSize: '14px'
-};
-
 const studentSource = {
   beginDrag(props) {
     return {
@@ -59,12 +45,14 @@ export default class Student extends Component {
   }
 
   render() {
-    const { isDragging, connectDragSource, count, name } = this.props;
+    const { isDragging, connectDragSource, count, name, styling } = this.props;
     const opacity = isDragging ? 0.4 : 1;
 
     return connectDragSource(
-      <div style={{ ...style, opacity }}>
-        <b style={{ fontSize: '140%' }}>{name.substring(0, 1)}</b>
+      <div style={{ ...styling, opacity }}>
+        <b style={{ fontSize: '140%' }}>
+          {name.substring(0, 1)}
+        </b>
         {name.substring(1, name.length)}
         <Badge
           style={{

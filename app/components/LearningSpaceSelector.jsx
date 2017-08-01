@@ -6,6 +6,20 @@ import Student from 'Student';
 import _ from 'lodash';
 import { laBox, laFooter } from 'styles.css';
 
+const styleDropped = {
+  border: '1px solid black',
+  backgroundColor: 'white',
+  padding: '0.2rem 0.5rem',
+  marginRight: '0.5rem',
+  marginBottom: '0.4rem',
+  cursor: 'move',
+  float: 'left',
+  width: '120px',
+  height: '35px',
+  textAlign: 'center',
+  fontSize: '14px'
+};
+
 const studentTarget = {
   canDrop(props, monitor) {
     let { id } = monitor.getItem();
@@ -90,6 +104,7 @@ export default class LearningSpace extends Component {
                       name={name}
                       id={studentKey}
                       count={count}
+                      styling={styleDropped}
                       moveStudent={() => {
                         moveStudent(studentKey);
                       }}
