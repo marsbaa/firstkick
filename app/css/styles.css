@@ -1,12 +1,12 @@
 .laBox {
-  width: 290px;
+  width: 370px;
   color: black;
   text-align: center;
   font-size: 14px;
   line-height: normal;
-  height: 200px;
+  height: 220px;
   padding: 0px;
-  margin: 5px 5px 25px 5px;
+  margin: 5px 5px 35px 5px;
   box-shadow: 2px 2px 2px 2px#888888;
   float: left;
   background-size: 100% 100%;
@@ -28,16 +28,14 @@
   box-shadow: 2px 2px 2px 2px #888888;
 }
 
-
 .inputfile {
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }
-
 
 &.active {
   background: #c94e50;

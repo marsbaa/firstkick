@@ -10,7 +10,7 @@ const styleDropped = {
   border: '1px solid black',
   backgroundColor: 'white',
   padding: '0.2rem 0.5rem',
-  marginRight: '0.5rem',
+  marginRight: '0.2rem',
   marginBottom: '0.4rem',
   cursor: 'move',
   float: 'left',
@@ -90,7 +90,7 @@ export default class LearningSpace extends Component {
         }}
       >
         <div style={{ height: '10px' }} />
-        <div style={{ height: '40px', paddingLeft: '5px' }}>
+        <div style={{ height: '70px', paddingLeft: '5px' }}>
           {_.size(students) !== 0
             ? Object.keys(students).map(key => {
                 const { name, studentKey } = students[key];
