@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Button, Row, Col, Checkbox } from 'react-bootstrap';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { addGrade } from 'actions';
+import { updateGrade } from 'actions';
 
 const StyledStudentBox = styled.div`
   border: 1px solid black;
@@ -42,38 +42,26 @@ class GradeFormModal extends Component {
     this.state = {
       name: '',
       slots: '',
-      badge: false
+      badge: ''
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleBadge = this.handleBadge.bind(this);
-    this.handleSlotsChange = this.handleSlotsChange.bind(this);
-  }
-
-  handleNameChange(e) {
-    this.setState({ name: e.target.value });
-  }
-
-  handleSlotsChange(e) {
-    this.setState({ slots: e.target.value });
-  }
-
-  handleBadge(e) {
-    this.setState({ badge: this.state.badge ? false : true });
   }
 
   handleSubmit() {
     const { dispatch } = this.props;
+    const { key, name, slots, badge } = this.props.grade;
     var grade = {
-      name: this.state.name,
-      slots: this.state.slots,
-      badge: this.state.badge
+      name: this.state.name === '' ? name : this.state.name,
+      slots: this.state.slots === '' ? slots : this.state.slots,
+      badge: this.state.badge === '' ? badge : this.state.badge
     };
-    dispatch(addGrade(grade));
+    console.log(grade, key);
+    dispatch(updateGrade(grade, key));
     this.props.close();
   }
 
   render() {
-    const { show, close, title } = this.props;
+    const { show, close, title, grade } = this.props;
     return (
       <Modal show={show} onHide={close} bsSize="small">
         <Modal.Header closeButton>
@@ -90,12 +78,12 @@ class GradeFormModal extends Component {
                   <label>Name</label>
                   <input
                     className="form-control"
-                    style={{}}
                     type="text"
                     id="name"
                     name="name"
+                    defaultValue={grade.name}
                     placeholder="Enter Grade name"
-                    onChange={this.handleNameChange.bind(this)}
+                    onChange={e => this.setState({ name: e.target.value })}
                   />
                 </div>
                 <div className="form-group">
@@ -105,15 +93,17 @@ class GradeFormModal extends Component {
                     type="text"
                     name="maxSlots"
                     id="maxSlots"
+                    defaultValue={grade.slots}
                     placeholder="Enter Slots per day"
-                    onChange={this.handleSlotsChange.bind(this)}
+                    onChange={e => this.setState({ slots: e.target.value })}
                   />
                 </div>
                 <Checkbox
                   name="badgeEnable"
                   style={{ marginRight: '5px' }}
-                  defaultChecked={this.state.badge}
-                  onChange={this.handleBadge}
+                  defaultChecked={grade.badge}
+                  onChange={() =>
+                    this.setState({ badge: this.state.badge ? false : true })}
                 >
                   Enable Badges
                 </Checkbox>

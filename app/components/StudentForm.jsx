@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
-import { Row, Col, Glyphicon } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+  Glyphicon,
+  FormGroup,
+  ControlLabel,
+  FormControl
+} from 'react-bootstrap';
 import { laHeader, inputfile } from 'styles.css';
 import StudentFormModal from 'StudentFormModal';
 import StudentModal from 'StudentModal';
 import styled from 'styled-components';
-import { startStudents, addStudent } from 'actions';
+import { startStudents, addStudent, startGrade } from 'actions';
 import isEmpty from 'lodash/isEmpty';
+import filter from 'lodash/filter';
 import Papa from 'papaparse';
 
 const StyledStudentBox = styled.div`
@@ -34,9 +42,9 @@ const StyledButton = styled.button`
   vertical-align: middle;
   cursor: pointer;
   -webkit-user-select: none;
-   -moz-user-select: none;
-    -ms-user-select: none;
-        user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   background-image: none;
   border: 1px solid #656565;
   border-radius: 5px;
@@ -46,7 +54,7 @@ const StyledButton = styled.button`
 `;
 
 const StyledCircleButton = styled.a`
-  display:block;
+  display: block;
   height: 30px;
   padding: 5px;
   width: 30px;
@@ -55,10 +63,10 @@ const StyledCircleButton = styled.a`
   background: #fffce1;
   color: #656565;
   &:hover,
-    &:focus {
-      text-decoration: none;
-      color: #c94e50
-    }
+  &:focus {
+    text-decoration: none;
+    color: #c94e50;
+  }
 `;
 const SHeader = styled(Row)`
   height: 35px;
@@ -76,14 +84,23 @@ class StudentForm extends Component {
     this.state = {
       showModal: false,
       showStudentModal: false,
-      student: ''
+      student: '',
+      gradeSelected: 'Prep'
     };
+    this.handleGrade = this.handleGrade.bind(this);
   }
   componentWillMount() {
-    const { dispatch, students } = this.props;
+    const { dispatch, students, grades } = this.props;
     if (isEmpty(students)) {
       dispatch(startStudents());
     }
+    if (isEmpty(grades)) {
+      dispatch(startGrade());
+    }
+  }
+
+  handleGrade(e) {
+    this.setState({ gradeSelected: e.target.value });
   }
 
   handleChange(e) {
@@ -114,12 +131,19 @@ class StudentForm extends Component {
   }
 
   render() {
-    const { students } = this.props;
-
+    const { students, grades } = this.props;
+    let filteredStudents;
+    if (this.state.gradeSelected !== '') {
+      filteredStudents = filter(students, {
+        grade: this.state.gradeSelected
+      });
+    }
     return (
       <div key="studentform" style={{ margin: '20px 40px 40px 20px' }}>
         <StudentFormModal
           title="ADD STUDENT"
+          grades={grades}
+          grade={this.state.gradeSelected}
           show={this.state.showModal}
           close={this.close.bind(this)}
         />
@@ -130,7 +154,26 @@ class StudentForm extends Component {
           student={this.state.student}
         />
         <Row style={{ textAlign: 'center', margin: '10px 20px' }}>
-          <Col xs={10} md={10} lg={10} />
+          <Col xs={2} md={2} lg={2}>
+            <FormGroup style={{ marginBottom: '0' }}>
+              <FormControl
+                id="gradeSelect"
+                componentClass="select"
+                placeholder="select"
+                onChange={this.handleGrade}
+              >
+                {Object.keys(grades).map(key => {
+                  const { name } = grades[key];
+                  return (
+                    <option key={key} value={name}>
+                      {name}
+                    </option>
+                  );
+                })}
+              </FormControl>
+            </FormGroup>
+          </Col>
+          <Col xs={8} md={8} lg={8} />
           <Col xs={2} md={2} lg={2} style={{ paddingLeft: '150px' }}>
             <StyledCircleButton
               onClick={() => this.setState({ showModal: true })}
@@ -141,14 +184,14 @@ class StudentForm extends Component {
         </Row>
         <SHeader>
           <Col xs={12} md={12} lg={12}>
-            {Object.keys(students).map(key => {
-              const { name } = students[key];
+            {Object.keys(filteredStudents).map(key => {
+              const { name } = filteredStudents[key];
               return (
                 <StyledStudentBox
                   key={key}
                   onClick={() =>
                     this.setState({
-                      student: students[key],
+                      student: filteredStudents[key],
                       showStudentModal: true
                     })}
                 >
@@ -159,7 +202,9 @@ class StudentForm extends Component {
                   </Row>
                   <Row>
                     <Col xs={12} md={12} lg={12}>
-                      <b style={{ fontSize: '120%' }}>{name.substring(0, 1)}</b>
+                      <b style={{ fontSize: '120%' }}>
+                        {name.substring(0, 1)}
+                      </b>
                       {name.substring(1, name.length)}
                     </Col>
                   </Row>
@@ -175,7 +220,8 @@ class StudentForm extends Component {
 
 function mapStateToProps(state) {
   return {
-    students: state.students
+    students: state.students,
+    grades: state.grade
   };
 }
 

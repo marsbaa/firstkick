@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import {
   Row,
@@ -7,7 +6,10 @@ import {
   Glyphicon,
   Badge,
   ButtonGroup,
-  Button
+  Button,
+  FormGroup,
+  ControlLabel,
+  FormControl
 } from 'react-bootstrap';
 import DeleteModal from 'DeleteModal';
 import FormModal from 'FormModal';
@@ -193,10 +195,7 @@ class LearningSpaceForm extends Component {
 
         <Row style={{ textAlign: 'center', margin: '10px 20px' }}>
           <Col xs={2} md={2} lg={2}>
-            <FormGroup
-              controlId="formControlsSelect"
-              style={{ marginBottom: '0' }}
-            >
+            <FormGroup style={{ marginBottom: '0' }}>
               <FormControl
                 id="gradeSelect"
                 componentClass="select"

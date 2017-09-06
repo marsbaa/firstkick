@@ -116,25 +116,38 @@ class Container extends Component {
   }
 
   render() {
-    const { learningSpaces, students, learningAgreements, grade } = this.props;
+    const {
+      learningSpaces,
+      students,
+      learningAgreements,
+      grade,
+      display,
+      sessionId,
+      badgeEnabled
+    } = this.props;
     document.addEventListener('contextmenu', event => event.preventDefault());
-    const selectedGrade = this.props.match.params.grade;
     let dropStudent = 0;
     let filteredLA = filter(learningAgreements, o => {
       if (o.date !== undefined) {
         return moment().isSame(o.date, 'day');
       }
     });
-    let filteredStudents = filter(students, { grade: selectedGrade });
+    filteredLA = filter(filteredLA, { sessionId: sessionId });
+    let filteredStudents = filter(students, { grade: grade });
     filteredLA = filter(filteredLA, o => {
       return find(filteredStudents, { key: o.studentKey }) !== undefined;
     });
     let filteredLearningSpaces = filter(learningSpaces, {
-      grade: selectedGrade
+      grade: grade
     });
 
     return (
-      <div style={{ margin: '20px 40px 40px 20px' }}>
+      <div
+        style={{
+          margin: '20px 40px 40px 20px',
+          display: display ? '' : 'none'
+        }}
+      >
         <Preview generator={this.generatePreview} />
         <StudentModal
           title="STUDENT DETAILS"
@@ -166,14 +179,16 @@ class Container extends Component {
                     badge={badgeURL}
                     students={laStudents}
                     id={key}
+                    sessionId={sessionId}
                     earnBadge={earnBadge}
+                    badgeEnabled={badgeEnabled}
                     maxSize={parseInt(maxGroupSize)}
-                    onDrop={item => this.handleDrop(key, item)}
+                    onDrop={item => this.handleDrop(key, item, sessionId)}
                     learningAgreements={filter(learningAgreements, {
                       learningSpaceKey: key
                     })}
                     moveStudent={item => {
-                      this.handleDropOutside(item);
+                      this.handleDropOutside(item, sessionId);
                     }}
                   />
                 );
@@ -206,7 +221,7 @@ class Container extends Component {
                         id={key}
                         styling={style}
                         moveStudent={() => {
-                          this.handleDropOutside(key);
+                          this.handleDropOutside(key, sessionId);
                         }}
                       />
                     );
@@ -214,11 +229,13 @@ class Container extends Component {
                 })}
               </Col>
             </Row>
-            <Row>
-              <Col xs={12} md={12} lg={12}>
-                <BadgeCheck onDrop={item => this.handleBadgeCheck(item)} />
-              </Col>
-            </Row>
+            {badgeEnabled
+              ? <Row>
+                  <Col xs={12} md={12} lg={12}>
+                    <BadgeCheck onDrop={item => this.handleBadgeCheck(item)} />
+                  </Col>
+                </Row>
+              : null}
           </Col>
         </Row>
       </div>
@@ -233,28 +250,31 @@ class Container extends Component {
     });
   }
 
-  handleDropOutside(key) {
+  handleDropOutside(key, sessionId) {
     const { dispatch, learningAgreements } = this.props;
     let filteredLA = filter(learningAgreements, o => {
       return moment().isSame(o.date, 'day');
     });
+    filteredLA = filter(filteredLA, { sessionId: sessionId });
     const la = find(filteredLA, { studentKey: key });
     if (la !== undefined) {
       dispatch(removeLearningAgreement(la.key));
     }
   }
 
-  handleDrop(key, item) {
+  handleDrop(key, item, sessionId) {
     const { dispatch, learningAgreements } = this.props;
     const learningAgreement = {
       date: moment().format(),
       name: item.name,
       studentKey: item.id,
-      learningSpaceKey: key
+      learningSpaceKey: key,
+      sessionId
     };
     let filteredLA = filter(learningAgreements, o => {
       return moment().isSame(o.date, 'day');
     });
+    filteredLA = filter(filteredLA, { sessionId: sessionId });
     const exist = find(filteredLA, { studentKey: item.id });
     if (exist !== undefined) {
       dispatch(addLearningAgreement(learningAgreement, exist.key));

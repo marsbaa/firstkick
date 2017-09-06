@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Button, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Row, Col, FormControl } from 'react-bootstrap';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { addStudent } from 'actions';
@@ -41,48 +41,35 @@ class StudentFormModal extends Component {
     super(props);
     this.state = {
       name: '',
-      pictureFile: '',
-      picturePreviewUrl: '',
-      grade: 'Prep'
+      grade: props.grade
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleGrade = this.handleGrade.bind(this);
   }
 
   handleNameChange(e) {
     this.setState({ name: e.target.value });
   }
 
-  handlePictureChange(e) {
-    e.preventDefault();
-    let reader = new FileReader();
-    let file = e.target.files[0];
-
-    reader.onloadend = () => {
-      this.setState({
-        pictureFile: file,
-        picturePreviewUrl: reader.result
-      });
-    };
-
-    reader.readAsDataURL(file);
+  handleGrade(e) {
+    this.setState({ grade: e.target.value });
   }
 
   handleSubmit() {
     const { dispatch } = this.props;
     var student = {
       name: this.state.name,
-      pictureFilename: this.state.pictureFile.name,
-      grade: this.state.grade,
+      grade: document.getElementById('gradeSelect').value,
       status: 'current'
     };
-    dispatch(addStudent(student, this.state.pictureFile));
+    dispatch(addStudent(student));
     this.props.close();
   }
 
   render() {
-    const { show, close, title } = this.props;
+    const { show, close, title, grades, grade } = this.props;
     return (
-      <Modal show={show} onHide={close} bsSize="medium">
+      <Modal show={show} onHide={close} bsSize="small">
         <Modal.Header closeButton>
           <Modal.Title>
             {title}
@@ -91,7 +78,7 @@ class StudentFormModal extends Component {
 
         <Modal.Body>
           <Row style={{ padding: '20px' }}>
-            <Col xs={7} md={7} lg={7}>
+            <Col xs={12} md={12} lg={12}>
               <form>
                 <div className="form-group">
                   <label>Name</label>
@@ -105,30 +92,26 @@ class StudentFormModal extends Component {
                     onChange={this.handleNameChange.bind(this)}
                   />
                 </div>
-                <label>Picture</label>
-                <input
-                  type="file"
-                  name="picture"
-                  id="picture"
-                  onChange={this.handlePictureChange.bind(this)}
-                />
+                <div className="form-group" style={{ marginBottom: '0' }}>
+                  <label>Grade</label>
+                  <FormControl
+                    id="gradeSelect"
+                    componentClass="select"
+                    placeholder="select"
+                    defaultValue={grade}
+                    onChange={this.handleGrade}
+                  >
+                    {Object.keys(grades).map(key => {
+                      const { name } = grades[key];
+                      return (
+                        <option key={key} value={name}>
+                          {name}
+                        </option>
+                      );
+                    })}
+                  </FormControl>
+                </div>
               </form>
-            </Col>
-            <Col xs={5} md={5} lg={5}>
-              <StyledStudentBox key="studentBox">
-                <Row>
-                  <Col xs={12} md={12} lg={12}>
-                    <img src="../image/user.png" style={{ width: '100px' }} />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} md={12} lg={12}>
-                    <b style={{ fontSize: '120%' }}>
-                      {this.state.name}
-                    </b>
-                  </Col>
-                </Row>
-              </StyledStudentBox>
             </Col>
           </Row>
         </Modal.Body>

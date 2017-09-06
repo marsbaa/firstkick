@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { startGrade } from 'actions';
 import { Link } from 'react-router-dom';
+import { Row, Col } from 'react-bootstrap';
 
 class Dashboard extends React.Component {
   componentWillMount() {
@@ -21,27 +22,32 @@ class Dashboard extends React.Component {
           alignItems: 'center'
         }}
       >
-        {Object.keys(grade).map(key => {
-          return (
-            <Link key={key} to={'/' + grade[key].name}>
-              <div
-                style={{
-                  width: '200px',
-                  height: '200px',
-                  backgroundColor: 'papayawhip',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '5px'
-                }}
-              >
-                <h1>
-                  {grade[key].name}
-                </h1>
-              </div>
-            </Link>
-          );
-        })}
+        <Row>
+          <Col xs={12} md={12} lg={12}>
+            {Object.keys(grade).map(key => {
+              return (
+                <Link key={key} to={'/' + grade[key].name}>
+                  <div
+                    style={{
+                      width: '200px',
+                      height: '200px',
+                      backgroundColor: 'papayawhip',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '5px',
+                      float: 'left'
+                    }}
+                  >
+                    <h1>
+                      {grade[key].name}
+                    </h1>
+                  </div>
+                </Link>
+              );
+            })}
+          </Col>
+        </Row>
       </div>
     );
   }

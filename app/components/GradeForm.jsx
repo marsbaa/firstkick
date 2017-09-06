@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Glyphicon } from 'react-bootstrap';
 import GradeFormModal from 'GradeFormModal';
+import EditGradeFormModal from 'EditGradeFormModal';
 import styled from 'styled-components';
 import { startGrade } from 'actions';
 import isEmpty from 'lodash/isEmpty';
@@ -58,7 +59,9 @@ class GradeForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: false
+      showModal: false,
+      showEditModal: false,
+      selectedGrade: {}
     };
   }
   componentWillMount() {
@@ -68,14 +71,26 @@ class GradeForm extends Component {
     }
   }
 
+  handleEditGrade(grade) {
+    this.setState({
+      selectedGrade: grade,
+      showEditModal: true
+    });
+  }
+
   close(e) {
     this.setState({
       showModal: false
     });
   }
+  closeE(e) {
+    this.setState({
+      showEditModal: false
+    });
+  }
 
   render() {
-    const { grade } = this.props;
+    const { grades } = this.props;
 
     return (
       <div key="gradeform" style={{ margin: '20px 40px 40px 20px' }}>
@@ -83,6 +98,12 @@ class GradeForm extends Component {
           title="ADD GRADE"
           show={this.state.showModal}
           close={this.close.bind(this)}
+        />
+        <EditGradeFormModal
+          title="EDIT GRADE"
+          grade={this.state.selectedGrade}
+          show={this.state.showEditModal}
+          close={this.closeE.bind(this)}
         />
         <Row style={{ textAlign: 'center', margin: '10px 20px' }}>
           <Col xs={10} md={10} lg={10} />
@@ -95,7 +116,31 @@ class GradeForm extends Component {
           </Col>
         </Row>
         <SHeader>
-          <Col xs={12} md={12} lg={12} />
+          <Col xs={12} md={12} lg={12}>
+            {Object.keys(grades).map(key => {
+              return (
+                <div className="gradeBox" key={key}>
+                  <Row className="gradeHeader">
+                    <Col xs={10} md={10} lg={10} />
+                    <Col xs={2} md={2} lg={2}>
+                      <StyledButton
+                        onClick={() => this.handleEditGrade(grades[key])}
+                      >
+                        <Glyphicon glyph="pencil" />
+                      </StyledButton>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12} md={12} lg={12}>
+                      <h1>
+                        {grades[key].name}
+                      </h1>
+                    </Col>
+                  </Row>
+                </div>
+              );
+            })}
+          </Col>
         </SHeader>
       </div>
     );
@@ -104,7 +149,8 @@ class GradeForm extends Component {
 
 function mapStateToProps(state) {
   return {
-    students: state.students
+    students: state.students,
+    grades: state.grade
   };
 }
 

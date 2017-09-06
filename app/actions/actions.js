@@ -370,45 +370,18 @@ export const addStudents = students => {
   };
 };
 
-export const addStudent = (student, pictureFile) => {
+export const addStudent = student => {
   return dispatch => {
     const studentRef = firebaseRef.child('students');
     const newKey = studentRef.push().key;
     let updates = {};
-    var storageRef = firebase.storage().ref();
-    var uploadTask = storageRef
-      .child('images/' + student.pictureFilename)
-      .put(pictureFile);
-    uploadTask.on(
-      'state_changed',
-      function(snapshot) {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        var progress = snapshot.bytesTransferred / snapshot.totalBytes * 100;
-        console.log('Upload is ' + progress + '% done');
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED: // or 'paused'
-            console.log('Upload is paused');
-            break;
-          case firebase.storage.TaskState.RUNNING: // or 'running'
-            console.log('Upload is running');
-            break;
-        }
-      },
-      function(error) {
-        // Handle unsuccessful uploads
-      },
-      function() {
-        var pictureURL = uploadTask.snapshot.downloadURL;
-        updates[newKey] = {
-          ...student,
-          pictureURL
-        };
-        studentRef.update(updates);
-        student.key = newKey;
-        dispatch(addS(student));
-      }
-    );
+
+    updates[newKey] = {
+      ...student
+    };
+    studentRef.update(updates);
+    student.key = newKey;
+    dispatch(addS(student));
   };
 };
 
@@ -461,6 +434,19 @@ export const addGrade = grade => {
   grade.key = newKey;
   return {
     type: 'ADD_GRADE',
+    grade
+  };
+};
+
+export const updateGrade = (grade, key) => {
+  var gradeRef = firebaseRef.child('grade');
+  var newKey = gradeRef.push().key;
+  var updates = {};
+  updates[key] = grade;
+  gradeRef.update(updates);
+  grade.key = key;
+  return {
+    type: 'UPDATE_GRADE',
     grade
   };
 };

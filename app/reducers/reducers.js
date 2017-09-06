@@ -99,6 +99,13 @@ export var gradeReducer = (state = {}, action) => {
           ...action.grade
         }
       };
+    case 'UPDATE_GRADE':
+      return {
+        ...state,
+        [action.grade.key]: {
+          ...action.grade
+        }
+      };
     default:
       return state;
   }

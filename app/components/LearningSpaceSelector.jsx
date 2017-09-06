@@ -54,7 +54,8 @@ export default class LearningSpace extends Component {
     learningAgreements: PropTypes.array.isRequired,
     maxSize: PropTypes.number.isRequired,
     moveStudent: PropTypes.func.isRequired,
-    id: PropTypes.string
+    id: PropTypes.string,
+    sessionId: PropTypes.number
   };
 
   render() {
@@ -70,7 +71,9 @@ export default class LearningSpace extends Component {
       maxSize,
       moveStudent,
       id,
-      earnBadge
+      earnBadge,
+      sessionId,
+      badgeEnabled
     } = this.props;
     const isActive = canDrop && isOver;
 
@@ -116,7 +119,9 @@ export default class LearningSpace extends Component {
         </div>
         <Row className="laFooter">
           <Col xs={2}>
-            <img style={{ marginTop: '5px', width: '20px' }} src={badge} />
+            {badgeEnabled
+              ? <img style={{ marginTop: '5px', width: '20px' }} src={badge} />
+              : null}
           </Col>
           <Col xs={8} style={{ margin: '0px', paddingTop: '10px' }}>
             <b>
