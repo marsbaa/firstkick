@@ -18,7 +18,8 @@ import {
   startLearningSpaces,
   startLearningAgreements,
   addLearningAgreement,
-  removeLearningAgreement
+  removeLearningAgreement,
+  watchLAAddedEvent
 } from 'actions';
 import isEmpty from 'lodash/isEmpty';
 import find from 'lodash/find';
@@ -77,13 +78,13 @@ class Container extends Component {
       learningAgreements
     } = this.props;
     if (isEmpty(students)) {
-      dispatch(startStudents());
+      this.props.StartStudents();
     }
     if (isEmpty(learningSpaces)) {
-      dispatch(startLearningSpaces());
+      this.props.StartLearningSpaces();
     }
     if (isEmpty(learningAgreements)) {
-      dispatch(startLearningAgreements());
+      this.props.StartLearningAgreements();
     }
   }
 
@@ -258,7 +259,7 @@ class Container extends Component {
     filteredLA = filter(filteredLA, { sessionId: sessionId });
     const la = find(filteredLA, { studentKey: key });
     if (la !== undefined) {
-      dispatch(removeLearningAgreement(la.key));
+      this.props.RemoveLearningAgreement(la.key);
     }
   }
 
@@ -277,9 +278,9 @@ class Container extends Component {
     filteredLA = filter(filteredLA, { sessionId: sessionId });
     const exist = find(filteredLA, { studentKey: item.id });
     if (exist !== undefined) {
-      dispatch(addLearningAgreement(learningAgreement, exist.key));
+      this.props.AddLearningAgreement(learningAgreement, exist.key);
     } else {
-      dispatch(addLearningAgreement(learningAgreement, null));
+      this.props.AddLearningAgreement(learningAgreement, null);
     }
   }
 }
@@ -292,4 +293,14 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Container);
+function mapDispatchToProps(dispatch) {
+  watchLAAddedEvent(dispatch);
+  return {
+    StartStudents: () => dispatch(startStudents()),
+    StartLearningSpaces: () => dispatch(startLearningSpaces()),
+    StartLearningAgreements: () => dispatch(startLearningAgreements()),
+    RemoveLearningAgreement: key => dispatch(removeLearningAgreement(key)),
+    AddLearningAgreement: (la, key) => dispatch(addLearningAgreement(la, key))
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Container);

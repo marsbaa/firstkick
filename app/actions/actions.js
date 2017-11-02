@@ -1,6 +1,7 @@
 import firebase, { firebaseRef } from 'app/firebase';
 
 //Actions for Learning Spaces
+let initialDataLoaded = false;
 
 export const startLearningSpaces = () => {
   return dispatch => {
@@ -294,6 +295,7 @@ export const startLearningAgreements = () => {
   return dispatch => {
     var laRef = firebaseRef.child('learningAgreements');
     laRef.once('value').then(snapshot => {
+      initialDataLoaded = true;
       var la = snapshot.val();
       var parsedLA = [];
       if (la !== null) {
@@ -308,6 +310,27 @@ export const startLearningAgreements = () => {
     });
   };
 };
+
+export function watchLAAddedEvent(dispatch) {
+  firebase.database().ref('learningAgreements').on('child_added', snap => {
+    if (initialDataLoaded) {
+      let la = snap.val();
+      la.key = snap.key;
+      console.log(la);
+      dispatch({
+        type: 'ADD_LEARNING_AGREEMENT',
+        learningAgreement: la,
+        removeKey: null
+      });
+    }
+  });
+  firebase.database().ref('learningAgreements').on('child_removed', snap => {
+    dispatch({
+      type: 'REMOVE_LEARNING_AGREEMENT',
+      key: snap.key
+    });
+  });
+}
 
 export const addLearningAgreements = la => {
   return {
