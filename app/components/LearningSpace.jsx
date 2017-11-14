@@ -52,20 +52,22 @@ const LearningSpace = props => {
     >
       <Row className="laHeader">
         <Col xs={7} md={7} lg={7}>
-          {tags.map((tag, id) => {
-            return (
-              <Badge
-                style={{
-                  marginTop: '7px',
-                  marginRight: '2px',
-                  float: 'left'
-                }}
-                key={id}
-              >
-                {tag}
-              </Badge>
-            );
-          })}
+          {tags !== undefined
+            ? tags.map((tag, id) => {
+                return (
+                  <Badge
+                    style={{
+                      marginTop: '7px',
+                      marginRight: '2px',
+                      float: 'left'
+                    }}
+                    key={id}
+                  >
+                    {tag}
+                  </Badge>
+                );
+              })
+            : null}
         </Col>
         <Col xs={5} md={5} lg={5} style={{ marginTop: '3px' }}>
           <StyledButton
