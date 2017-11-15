@@ -8,6 +8,7 @@ import GradeForm from 'GradeForm';
 import StudentForm from 'StudentForm';
 import Summary from 'Summary';
 import NavBar from 'NavBar';
+import Help from 'Help';
 import { Provider } from 'react-redux';
 
 var store = require('configureStore').configure();
@@ -22,6 +23,7 @@ ReactDOM.render(
           <Route path="/gradeform" component={GradeForm} />
           <Route path="/students" component={StudentForm} />
           <Route path="/summary" component={Summary} />
+          <Route path="/help" component={Help} />
           <Route path="/:grade" component={ContainerPanel} />
           <Route path="/" component={Dashboard} />
         </Switch>

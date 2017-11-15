@@ -102,6 +102,9 @@ class NavBar extends Component {
           >
             <SGlyphicon glyph="stats" /> View Summary
           </StyledLink>
+          <StyledLink to="/help" onClick={() => this.setState({ show: false })}>
+            <SGlyphicon glyph="question-sign" /> Help
+          </StyledLink>
         </Menu>
         <main id="page-wrap">
           <StyledNavBar>
